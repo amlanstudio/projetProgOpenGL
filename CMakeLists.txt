@@ -1,35 +1,54 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.11)
+project(OpenGLTemplate)
 
-project(SimpleOpenGL)
 add_executable(${PROJECT_NAME})
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_11)
 
-# Enable many good warnings
+# Get source files
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS "src/*")
+# link files to project target
+target_sources(${PROJECT_NAME} PRIVATE ${SRC_FILES})
+target_include_directories(${PROJECT_NAME} PRIVATE "src/")
+
+# Enable C++17
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+)
+
+# Enable good warnings
 if (MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE /WX /W3)
+   target_compile_options(${PROJECT_NAME} PRIVATE /W3)
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -pedantic-errors)
 endif()
 
-# Set the folder where the executable is created
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
+# Set the folder where the executable will be created
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-# Add all the files
-file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS src/*)
-target_sources(${PROJECT_NAME} PRIVATE ${MY_SOURCES})
-target_include_directories(${PROJECT_NAME} PRIVATE src)
+# Configure assets header file
+# tips found here : https://shot511.github.io/2018-05-29-how-to-setup-opengl-project-with-cmake/
+configure_file(src/helpers/RootDir.hpp.in src/helpers/RootDir.hpp)
+include_directories(${CMAKE_BINARY_DIR}/src)
 
+# Librairies
 # ---Add GLFW---
-add_subdirectory(lib/glfw)
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+add_subdirectory(third_party/glfw)
+target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
+
 # ---Add glad---
-add_library(glad lib/glad/src/glad.c)
-target_include_directories(glad PUBLIC lib/glad/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE glad)
+add_library(glad third_party/glad/src/glad.c)
+target_include_directories(glad PUBLIC third_party/glad/include)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad)
 
-target_include_directories(${PROJECT_NAME} PUBLIC includes)
+# ---Add glm---
+target_include_directories(${PROJECT_NAME} PUBLIC third_party/glm)
 
-# Copy the assets to the output folder (where the executable is created)
-include("lib/CMakeUtils/files_and_folders.cmake")
-Cool__target_copy_folder(${PROJECT_NAME} "assets")
+# --- Add Std_image ---
+add_library(stb_image third_party/stb/stb_image.cpp third_party/stb/stb_image_write.cpp)
+target_include_directories(${PROJECT_NAME} PUBLIC third_party/stb)
+target_link_libraries(${PROJECT_NAME} PUBLIC stb_image)

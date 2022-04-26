@@ -1,46 +1,43 @@
 #include "App.hpp"
 
-static App& get_app(GLFWwindow* window)
-{
+static App& get_app(GLFWwindow* window) {
     return *reinterpret_cast<App*>(glfwGetWindowUserPointer(window));
 }
 
-int main()
-{
-    /* Initialize the library */
+int main() {
+    // Initialize the library
     if (!glfwInit()) {
         return -1;
     }
 
-    /* Create a windowed mode window and its OpenGL context */
+    // Create a windowed mode window and its OpenGL context
 #ifdef __APPLE__
-    /* We need to explicitly ask for a 3.3 context on Mac */
+    // We need to explicitly ask for a 3.3 context on Mac
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Hello World", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "OpenGLTemplate", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         return -1;
     }
 
-    /* Make the window's context current */
+    // Make the window's context current
     glfwMakeContextCurrent(window);
 
-    /* Intialize glad (loads the OpenGL functions) */
+    // Intialize glad (loads the OpenGL functions)
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         return -1;
     }
 
-    /* Create the App */
-    int w, h;
-    glfwGetWindowSize(window, &w, &h);
-    App app{w, h};
+    // Create the App
+    App app;
 
-    /* Hook user inputs to the App */
+    // Hook user inputs to the App
     glfwSetWindowUserPointer(window, reinterpret_cast<void*>(&app));
+    
     glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
         get_app(window).key_callback(key, scancode, action, mods);
     });
@@ -57,14 +54,14 @@ int main()
         get_app(window).size_callback(width, height);
     });
 
-    /* Loop until the user closes the window */
+    // Loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
-        app.render();
+        app.Update();
 
-        /* Swap front and back buffers */
+        // Swap front and back buffers
         glfwSwapBuffers(window);
 
-        /* Poll for and process events */
+        // Poll for and process events
         glfwPollEvents();
     }
 
