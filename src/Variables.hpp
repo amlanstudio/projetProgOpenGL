@@ -15,18 +15,29 @@ const glm::vec2 halfSize(WIDTH/2.f, HEIGHT/2.f);
     glm::vec2 p(halfSize.x, halfSize.y);
 
     // ici son poids
-    float w = 25;
+    float w = 5;
 
     // ici on construit le rectangle
     Rectangle test(WIDTH/15, HEIGHT/15, c, p, w);
 
+    glm::vec3 g(0, 1, 0);
+
     glm::vec2 pos(halfSize.x-500, halfSize.y);
-    Rectangle p2(WIDTH/15, HEIGHT/5, c, pos, w);
+    Rectangle p2(WIDTH/15, HEIGHT/5, g, pos, w);
+
+
+// Création d'un sol
+    glm::vec3 blue(0, 0, 1);
+    glm::vec2 pSol(halfSize.x, HEIGHT);
+    Rectangle sol(WIDTH, HEIGHT/10, blue, pSol, 0);
 
 //Exemple d'un niveau
     // ici on crée le vector de personnages du niveau 1
     std::vector<Rectangle> pLvl1 = {test, p2};
 
-    // ici on construit le niveau avec ses personnages
-    Niveau niv1(pLvl1);
+    // ici on crée le vector de formes du décor du niveau 1
+    std::vector<Rectangle> mLvl1 = {sol};
+
+    // ici on construit le niveau avec ses personnages et son décor
+    Niveau niv1(pLvl1, mLvl1, 10);
 #endif

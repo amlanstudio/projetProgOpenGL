@@ -2,6 +2,7 @@
 #ifndef FORMES_H
 #define FORMES_H
 #include <glm/glm.hpp>
+#include <vector>
 
 class Rectangle
 {
@@ -34,8 +35,22 @@ public:
     // Accès à la position
     glm::vec2 getPosition();
 
+    // Set d'une nouvelle position
+    void setPosition(glm::vec2 p);
+
     // Accès aux dimensions
     glm::vec2 getSize();
+
+    // Accès au poids
+    float getWeight();
+
+    // Permet de gérer collision
+    // TODO Quad Tree à faire
+    // TODO surement collisions pas parfaites
+    // bool collision(std::vector<Rectangle> others, int gravity);
+
+    glm::vec2 collisionLateral(std::vector<Rectangle> others);
+    glm::vec2 collisionVertical(std::vector<Rectangle> others);
 };
 
 class Triangle

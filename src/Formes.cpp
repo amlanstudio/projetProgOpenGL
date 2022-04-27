@@ -2,7 +2,7 @@
 #include "glad/glad.h"
 #include <math.h>
 
-float vitesse = 50;
+float vitesse = 100;
 
 Rectangle::Rectangle(float hW, float hH, glm::vec3 c, glm::vec2 p){
     this->halfHeight = hH;
@@ -42,16 +42,90 @@ void Rectangle::move(int direction){
     
     default:
         break;
-    }
+    } 
 } 
 
 glm::vec2 Rectangle::getPosition(){
     return this->position;
 }
 
+void Rectangle::setPosition(glm::vec2 p){
+    this->position = p;
+}
+
 glm::vec2 Rectangle::getSize(){
     glm::vec2 s(this->halfWidth, this->halfHeight);
     return s;
+}
+
+float Rectangle::getWeight(){
+    return this->weight;
+}
+
+// bool Rectangle::collision(std::vector<Rectangle> others, int gravity){
+//     bool boolean = false;
+//     int sideCollision = 0;
+//     for (int i = 0; i < others.size(); i++)
+//     {
+//         if(this->position.y+this->halfHeight >= others[i].position.y-others[i].halfHeight){
+//             // Collision en bas
+//             boolean = true;
+//         }
+//     }
+
+//     if(!boolean){
+//         this->position.y +=gravity*this->weight/10;
+//     }
+
+//     return boolean;
+// }
+
+glm::vec2 Rectangle::collisionLateral(std::vector<Rectangle> others){
+    for (int i = 0; i < others.size(); i++)
+    {
+        std::vector<Rectangle> col = {others[i]};
+        if((this->position.x - this->halfWidth <= others[i].position.x + others[i].halfWidth &&
+        this->position.x + this->halfWidth >= others[i].position.x - others[i].halfWidth &&
+        this->position.y - this->halfHeight <= others[i].position.y + others[i].halfHeight &&
+        this->position.y + this->halfHeight >= others[i].position.y - others[i].halfHeight))
+        {
+            //si le character vient vers la gauche
+            if(this->position.x - this->halfWidth < others[i].position.x + others[i].halfWidth-10)
+            {
+                glm::vec2 retour(-1, i);
+                return retour;
+            }
+            //s'il est a droite 
+            else if(this->position.x + this->halfWidth > others[i].position.x - others[i].halfWidth)
+            {
+                glm::vec2 retour(1, i);
+                return retour;
+            } 
+        }
+    }
+    glm::vec2 retour(0, 0);
+    return retour;
+}
+
+glm::vec2 Rectangle::collisionVertical(std::vector<Rectangle> others){
+    for (int i = 0; i < others.size(); i++)
+    {
+        if((this->position.x - this->halfWidth <= others[i].position.x + others[i].halfWidth &&
+        this->position.x + this->halfWidth >= others[i].position.x - others[i].halfWidth &&
+        this->position.y - this->halfHeight <= others[i].position.y + others[i].halfHeight &&
+        this->position.y + this->halfHeight >= others[i].position.y - others[i].halfHeight))
+        {
+            if(this->position.y+this->halfHeight >= others[i].position.y - others[i].halfHeight - 10){
+                glm::vec2 retour(1, i);
+                return retour;
+            } else {
+                glm::vec2 retour(0, 0);
+                return retour;
+            }
+        }
+    }
+    glm::vec2 retour(0, 0);
+    return retour;
 }
 
 Triangle::Triangle(float r, glm::vec3 c, glm::vec2 p){

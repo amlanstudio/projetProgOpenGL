@@ -55,6 +55,7 @@ void App::Update() {
     int direction = this->Controls(this->keyPressed);
             
     niv1.controls(direction);
+    niv1.collision();
 
     this->keyPressed = 0;
 
@@ -81,6 +82,7 @@ void App::Render() {
     //Exemple d'un niveau
         // ici on pense bien à dessiner tous les personnages
         niv1.drawPlayers();
+        niv1.drawMap();
 }
 
 int App::Controls(int scancode){
