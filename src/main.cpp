@@ -1,4 +1,5 @@
 #include "App.hpp"
+#include "Window.hpp"
 
 static App& get_app(GLFWwindow* window) {
     return *reinterpret_cast<App*>(glfwGetWindowUserPointer(window));
@@ -18,7 +19,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "OpenGLTemplate", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Les Cassoulettes", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         return -1;

@@ -10,7 +10,11 @@
 
 #include "helpers/RootDir.hpp"
 
-App::App() : _previousTime(0.0), _imageAngle(0.0f) {
+#include "Formes.hpp"
+#include "Niveau.hpp"
+#include "Variables.hpp"
+
+App::App() : _previousTime(0.0), _imageAngle(0.0f), _width(WIDTH), _height(HEIGHT) {
 
     // Generate texture
     glGenTextures(1, &_textureId);
@@ -48,6 +52,12 @@ void App::Update() {
     // update imageAngle (use elapsedTime to update without being dependent on the frame rate)
     _imageAngle = fmod(_imageAngle + 10.0f * (float)elapsedTime, 360.0f);
 
+    int direction = this->Controls(this->keyPressed);
+            
+    niv1.controls(direction);
+
+    this->keyPressed = 0;
+
     Render();
 }
 
@@ -63,27 +73,48 @@ void App::Render() {
 
     const glm::vec2 halfSize(_width/2.f, _height/2.f);
 
-    // Render the texture on the screen
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, _textureId);
-    glBegin(GL_QUADS);
-        glm::vec2 upperLeft = rotateVec2(glm::vec2(0, 0), halfSize, _imageAngle);
-        glTexCoord2d(0,0); glVertex2f(upperLeft.x, upperLeft.y);
 
-        glm::vec2 upperRight = rotateVec2(glm::vec2(_width, 0), halfSize, _imageAngle);
-        glTexCoord2d(1,0); glVertex2f(upperRight.x, upperRight.y);
+    // Exemple d'un rectangle
+        // ici on trace le rectangle
+        // test.draw();
 
-        glm::vec2 bottomRight = rotateVec2(glm::vec2(_width, _height), halfSize, _imageAngle);
-        glTexCoord2d(1,1); glVertex2f(bottomRight.x, bottomRight.y);
-
-        glm::vec2 bottomLeft = rotateVec2(glm::vec2(0, _height), halfSize, _imageAngle);
-        glTexCoord2d(0,1); glVertex2f(bottomLeft.x, bottomLeft.y);
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-
+    //Exemple d'un niveau
+        // ici on pense bien à dessiner tous les personnages
+        niv1.drawPlayers();
 }
 
-void App::key_callback(int /*key*/, int /*scancode*/, int /*action*/, int /*mods*/) {
+int App::Controls(int scancode){
+    // scancode haut : H
+    // scancode bas : P
+    // scancode gauche : K
+    // scancode droite : M
+    // scancode TAB : 15
+
+    int direction;
+    switch (scancode)
+    {
+    case 331:
+        direction = -1;
+        break;
+    case 333:
+        direction = 1;
+        break;
+    case 15:
+        direction = 9;
+        break;
+    
+    default:
+        direction = 0;
+        break;
+    }
+
+    return direction;
+}
+
+void App::key_callback(int key, int scancode, int action, int mods) {
+    std::cout << scancode << " was " << action << std::endl;
+
+    if(action == 1 || action == 2) this->keyPressed=scancode;
 }
 
 void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/) {

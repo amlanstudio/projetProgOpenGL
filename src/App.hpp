@@ -4,10 +4,14 @@
 #include "glad/glad.h"
 #include <glm/glm.hpp>
 
+#include "Niveau.hpp"
+
 class App {
 public:
     App();
     void Update();
+
+    int Controls(int scancode);
     
     // callbacks users input
     void key_callback(int key, int scancode, int action, int mods);
@@ -24,7 +28,11 @@ private:
     int _height;
     double _previousTime;
 
+    int keyPressed;
+
     GLuint _textureId;
 
     float _imageAngle;
+
+    std::vector<Niveau> levels;
 };
