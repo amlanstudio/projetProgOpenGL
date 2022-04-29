@@ -41,6 +41,12 @@ App::App() : _previousTime(0.0), _imageAngle(0.0f), _width(WIDTH), _height(HEIGH
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
+
+    for (size_t i = 0; i < 349; i++)
+    {
+        this->pressed[i] = false;
+    }
+    
 }
 
 void App::Update() {
@@ -52,12 +58,10 @@ void App::Update() {
     // update imageAngle (use elapsedTime to update without being dependent on the frame rate)
     _imageAngle = fmod(_imageAngle + 10.0f * (float)elapsedTime, 360.0f);
 
-    int direction = this->Controls(this->keyPressed);
+    int direction = this->Controls();
             
     niv1.controls(direction);
     niv1.collision();
-
-    this->keyPressed = 0;
 
     Render();
 }
@@ -85,38 +89,35 @@ void App::Render() {
         niv1.drawMap();
 }
 
-int App::Controls(int scancode){
+int App::Controls(){
     // scancode haut : H
     // scancode bas : P
     // scancode gauche : K
     // scancode droite : M
     // scancode TAB : 15
 
-    int direction;
-    switch (scancode)
-    {
-    case 331:
-        direction = -1;
-        break;
-    case 333:
-        direction = 1;
-        break;
-    case 15:
-        direction = 9;
-        break;
-    
-    default:
-        direction = 0;
-        break;
-    }
+    int direction = 0;
+
+    // TAB
+    if(this->pressed[258]) direction = 9;
+    else if(this->pressed[265] && this->pressed[262]) direction = 3;
+    else if(this->pressed[265] && this->pressed[263]) direction = -3;
+
+    else if(this->pressed[265]) direction = 2;
+    else if(this->pressed[262]) direction = 1;
+    else if(this->pressed[263]) direction = -1;
+    else direction = 0;
 
     return direction;
 }
 
 void App::key_callback(int key, int scancode, int action, int mods) {
-    std::cout << scancode << " was " << action << std::endl;
+    std::cout << key << " was " << action << std::endl;
 
-    if(action == 1 || action == 2) this->keyPressed=scancode;
+    if(action == GLFW_PRESS)
+        this->pressed[key] = true;
+    else if(action == GLFW_RELEASE)
+        this->pressed[key] = false;
 }
 
 void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/) {

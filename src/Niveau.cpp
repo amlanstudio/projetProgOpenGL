@@ -1,4 +1,5 @@
 #include "Niveau.hpp"
+#include <iostream>
 
 // Niveau::Niveau(Camera cam, std::vector<Rectangle> players, std::vector<Rectangle> map, float g){
 //     this->camera = cam;
@@ -58,6 +59,7 @@ void Niveau::collision(){
 
     for (int i = 0; i < this->players.size(); i++)
     {
+        std::vector<int> onSomething;
         std::vector<Rectangle> all = this->map;
         for (int j = 0; j < this->players.size(); j++)
         {
@@ -70,37 +72,51 @@ void Niveau::collision(){
         verticalCollision = this->players[i].collisionVertical(all);
 
         if(verticalCollision.x){
+            onSomething.push_back((int) verticalCollision.y);
+            this->players[i].setJump(false);
         } else {
             glm::vec2 newPos(this->players[i].getPosition().x, this->players[i].getPosition().y +this->gravity*this->players[i].getWeight()/10);
             this->players[i].setPosition(newPos);
-            // printf("w: %f \n", all[sideCollision.y].getWeight());
+            this->players[i].setJump(true);
         }
 
+        if(&(this->players[i]) == this->currentPlayer){
+            sideCollision = this->currentPlayer->collisionLateral(all);
+
+            std::vector<int>::iterator where = find(onSomething.begin(), onSomething.end(), sideCollision.y);
+
+            all.erase(all.begin()+ sideCollision.y);
+
+            if(where != onSomething.end() && *where == sideCollision.y){
+            // je veux supprimer sideCollision.y de mon tableau
+                onSomething.erase(onSomething.begin());
+            }
+
+            sideCollision = this->currentPlayer->collisionLateral(all);
+
+            where = find(onSomething.begin(), onSomething.end(), sideCollision.y);
+
+            if(where != onSomething.end())std::cout<< *where <<std::endl;
+
+            // TODO trouver solution
+
+            if(where == onSomething.end() && sideCollision.x != 0)
+            {                
+                if(sideCollision.x == -1){
+                    glm::vec2 newPos(all[sideCollision.y].getPosition().x - all[sideCollision.y].getSize().x - this->currentPlayer->getSize().x, this->currentPlayer->getPosition().y);
+                    this->currentPlayer->setPosition(newPos);
+                }
+                
+                if (sideCollision.x == 1){
+                    glm::vec2 newPos(all[sideCollision.y].getPosition().x + all[sideCollision.y].getSize().x + this->currentPlayer->getSize().x, this->currentPlayer->getPosition().y);
+                    this->currentPlayer->setPosition(newPos);
+                }
+            } 
+
+            if(where != onSomething.end() && *where == sideCollision.y){
+            // je veux supprimer sideCollision.y de mon tableau
+                onSomething.erase(onSomething.begin());
+            }
+        }
     }
-    
-    std::vector<Rectangle> all;
-        for (int j = 1; j < this->players.size(); j++)
-        {
-            all.push_back(this->players[j]);
-        }
-
-    sideCollision = this->currentPlayer->collisionLateral(all);
-
-    if(sideCollision.x != 0){
-        
-        if(sideCollision.x == -1){
-            glm::vec2 newPos(all[sideCollision.y].getPosition().x - all[sideCollision.y].getSize().x - this->currentPlayer->getSize().x, this->currentPlayer->getPosition().y);
-            this->currentPlayer->setPosition(newPos);
-        }
-        
-        if (sideCollision.x == 1){
-            glm::vec2 newPos(all[sideCollision.y].getPosition().x + all[sideCollision.y].getSize().x + this->currentPlayer->getSize().x, this->currentPlayer->getPosition().y);
-            this->currentPlayer->setPosition(newPos);
-        }
-
-        // printf("x: %f, y: %f \n", this->currentPlayer->getPosition().x, this->currentPlayer->getPosition().y);
-        // printf("w: %f \n", all[sideCollision.y].getWeight());
-    }
-
-    
 }

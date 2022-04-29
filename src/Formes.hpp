@@ -13,6 +13,7 @@ private:
     float halfHeight;
     float halfWidth;
     enum power;
+    bool isJumping = false;
 public:
     // Constructeur
     Rectangle(float hW, float hH, glm::vec3 c, glm::vec2 p);
@@ -32,6 +33,9 @@ public:
     // Permet de déplacer le personnage
     void move(int direction); 
 
+    // Permet de dire si le personnage saute ou pas
+    void setJump(bool jumping);
+
     // Accès à la position
     glm::vec2 getPosition();
 
@@ -47,8 +51,6 @@ public:
     // Permet de gérer collision
     // TODO Quad Tree à faire
     // TODO surement collisions pas parfaites
-    // bool collision(std::vector<Rectangle> others, int gravity);
-
     glm::vec2 collisionLateral(std::vector<Rectangle> others);
     glm::vec2 collisionVertical(std::vector<Rectangle> others);
 };

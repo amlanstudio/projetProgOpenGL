@@ -2,7 +2,10 @@
 #include "glad/glad.h"
 #include <math.h>
 
-float vitesse = 100;
+#include <iostream>
+
+float vitesse = 20;
+float jump = 800;
 
 Rectangle::Rectangle(float hW, float hH, glm::vec3 c, glm::vec2 p){
     this->halfHeight = hH;
@@ -33,17 +36,35 @@ void Rectangle::move(int direction){
     switch (direction)
     {
     case -1:
-        this->position.x -= 50/weight;
+        this->position.x -= vitesse/weight;
         break;
         
     case 1:
-        this->position.x += 50/weight;
+        this->position.x += vitesse/weight;
+        break;
+
+    case 2:
+        if(!this->isJumping) this->position.y -= jump/this->weight;
+        break;
+
+    case 3:
+        this->position.x += vitesse/weight;
+        if(!this->isJumping) this->position.y -= jump/this->weight;
+        break;
+
+    case -3:
+        this->position.x -= vitesse/weight;
+        if(!this->isJumping) this->position.y -= jump/this->weight;
         break;
     
     default:
         break;
-    } 
-} 
+    }
+}
+
+void Rectangle::setJump(bool jumping){
+    this->isJumping = jumping;
+}
 
 glm::vec2 Rectangle::getPosition(){
     return this->position;
@@ -61,24 +82,6 @@ glm::vec2 Rectangle::getSize(){
 float Rectangle::getWeight(){
     return this->weight;
 }
-
-// bool Rectangle::collision(std::vector<Rectangle> others, int gravity){
-//     bool boolean = false;
-//     int sideCollision = 0;
-//     for (int i = 0; i < others.size(); i++)
-//     {
-//         if(this->position.y+this->halfHeight >= others[i].position.y-others[i].halfHeight){
-//             // Collision en bas
-//             boolean = true;
-//         }
-//     }
-
-//     if(!boolean){
-//         this->position.y +=gravity*this->weight/10;
-//     }
-
-//     return boolean;
-// }
 
 glm::vec2 Rectangle::collisionLateral(std::vector<Rectangle> others){
     for (int i = 0; i < others.size(); i++)
@@ -119,7 +122,7 @@ glm::vec2 Rectangle::collisionVertical(std::vector<Rectangle> others){
                 glm::vec2 retour(1, i);
                 return retour;
             } else {
-                glm::vec2 retour(0, 0);
+                glm::vec2 retour(0, -1);
                 return retour;
             }
         }
