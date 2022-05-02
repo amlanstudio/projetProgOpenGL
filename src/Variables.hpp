@@ -5,8 +5,6 @@
 #include "Formes.hpp"
 #include "Window.hpp"
 
-const glm::vec2 halfSize(WIDTH/2.f, HEIGHT/2.f);
-
 // Exemple d'un rectangle
     // ici sa couleur normalisée entre 0 et 1
     glm::vec3 c(1, 1, 1);
@@ -38,6 +36,9 @@ const glm::vec2 halfSize(WIDTH/2.f, HEIGHT/2.f);
     // ici on crée le vector de formes du décor du niveau 1
     std::vector<Rectangle> mLvl1 = {sol};
 
-    // ici on construit le niveau avec ses personnages et son décor
+    // // ici on construit le niveau avec ses personnages et son décor et sa gravité
+    // Niveau niv1(pLvl1, mLvl1, 10);
+    
+    // ici on construit le niveau avec ses personnages et son décor sa gravité et sa camera
     Niveau niv1(pLvl1, mLvl1, 10);
 #endif

@@ -1,5 +1,6 @@
 #include "Niveau.hpp"
 #include <iostream>
+#include "Window.hpp"
 
 // Niveau::Niveau(Camera cam, std::vector<Rectangle> players, std::vector<Rectangle> map, float g){
 //     this->camera = cam;
@@ -18,6 +19,9 @@ Niveau::Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float
     this->currentPlayer = &(this->players[0]);
     this->map = map;
     this->gravity = g;
+
+    glm::vec2 newC(0, 0);
+    this->camera = newC;
 }
 
 void Niveau::drawPlayers(){
@@ -49,6 +53,8 @@ void Niveau::controls(int direction){
         this->players.erase(this->players.begin());
         this->currentPlayer = &(this->players[0]);
     } else {
+        this->camera.x = this->currentPlayer->getPosition().x - halfSize.x + 100;
+        this->camera.y = this->currentPlayer->getPosition().y - halfSize.y - 200;
         this->currentPlayer->move(direction);
     }
 }

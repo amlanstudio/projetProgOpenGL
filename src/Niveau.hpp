@@ -2,20 +2,24 @@
 #ifndef NIVEAU_H
 #define NIVEAU_H
 #include <vector>
-// #include "Camera.hpp"
 #include "Formes.hpp"
+#include "Niveau.hpp"
+#include <glm/glm.hpp>
 
 class Niveau
 {
 private:
-//    Camera camera;
    std::vector<Rectangle> players;
    std::vector<Rectangle> map;
    float gravity;
    Rectangle* currentPlayer;
+
 public:
+
+    glm::vec2 camera;
+    
     // Constructeur
-    // Niveau(Camera cam, std::vector<Rectangle> players, std::vector<Rectangle> map, float g);
+    // Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float g);
 
     // Constructeur avec juste des personnages
     Niveau(std::vector<Rectangle> players);

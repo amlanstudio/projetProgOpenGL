@@ -34,5 +34,5 @@ private:
 
     float _imageAngle;
 
-    std::vector<Niveau> levels;
+    std::vector<Niveau *> levels;
 };

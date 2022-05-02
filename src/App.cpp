@@ -46,7 +46,8 @@ App::App() : _previousTime(0.0), _imageAngle(0.0f), _width(WIDTH), _height(HEIGH
     {
         this->pressed[i] = false;
     }
-    
+
+    this->levels = {&niv1};
 }
 
 void App::Update() {
@@ -59,10 +60,10 @@ void App::Update() {
     _imageAngle = fmod(_imageAngle + 10.0f * (float)elapsedTime, 360.0f);
 
     int direction = this->Controls();
-            
-    niv1.controls(direction);
-    niv1.collision();
 
+    niv1.collision();       
+    niv1.controls(direction);
+    
     Render();
 }
 
@@ -73,7 +74,8 @@ void App::Render() {
     // Set up orphographic projection
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, _width, _height, 0, -1, 1);
+    // glOrtho(0, _width, _height, 0, -1, 1);
+    glOrtho(this->levels[0]->camera.x, _width + this->levels[0]->camera.x, _height + this->levels[0]->camera.y, this->levels[0]->camera.y, -1, 1);
     glMatrixMode(GL_MODELVIEW);
 
     const glm::vec2 halfSize(_width/2.f, _height/2.f);
