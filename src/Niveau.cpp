@@ -2,13 +2,6 @@
 #include <iostream>
 #include "Window.hpp"
 
-// Niveau::Niveau(Camera cam, std::vector<Rectangle> players, std::vector<Rectangle> map, float g){
-//     this->camera = cam;
-//     this->map = map;
-//     this->gravity = g;
-//     this->players = players;
-// }
-
 Niveau::Niveau(std::vector<Rectangle> players){
     this->players = players;
     this->currentPlayer = &(this->players[0]);
@@ -24,6 +17,18 @@ Niveau::Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float
     this->camera = newC;
 }
 
+Niveau::Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float g, std::vector<Rectangle> end){
+    this->players = players;
+    this->currentPlayer = &(this->players[0]);
+    this->map = map;
+    this->gravity = g;
+
+    glm::vec2 newC(0, 0);
+    this->camera = newC;
+
+    this->endPlayers = end;
+}
+
 void Niveau::drawPlayers(){
     for(int i = 0; i<this->players.size(); i++){
         this->players[i].draw();
@@ -35,14 +40,18 @@ void Niveau::drawPlayers(){
 
         // ici sa position
         glm::vec2 p(this->currentPlayer->getPosition());
-        p.y -= this->currentPlayer->getSize().y + 15;
-        Triangle showPlayer(10, c, p);
+        p.y += this->currentPlayer->getSize().y + 0.1;
+        Triangle showPlayer(0.05, c, p);
         showPlayer.draw();
 }
 
 void Niveau::drawMap(){
     for(int i = 0; i<this->map.size(); i++){
         this->map[i].draw();
+    }
+    
+    for(int i = 0; i<this->endPlayers.size(); i++){
+        this->endPlayers[i].draw();
     }
 }
 
@@ -53,9 +62,37 @@ void Niveau::controls(int direction){
         this->players.erase(this->players.begin());
         this->currentPlayer = &(this->players[0]);
     } else {
-        this->camera.x = this->currentPlayer->getPosition().x - halfSize.x + 100;
-        this->camera.y = this->currentPlayer->getPosition().y - halfSize.y - 200;
-        this->currentPlayer->move(direction);
+        this->camera.x = - this->currentPlayer->getPosition().x;
+        this->camera.y = - this->currentPlayer->getPosition().y - 0.6;
+        
+        bool moveable = true;
+        for(int i=0; i<this->endPlayers.size(); i++){
+            if((float)this->currentPlayer->getPosition().x >= (float)this->endPlayers[i].getPosition().x - 0.01 && 
+            (float)this->currentPlayer->getPosition().x <= (float)this->endPlayers[i].getPosition().x + 0.01 && 
+            (float)this->currentPlayer->getPosition().y >= (float)this->endPlayers[i].getPosition().y - 0.01 &&
+            (float)this->currentPlayer->getPosition().y <= (float)this->endPlayers[i].getPosition().y + 0.01
+            ){
+                moveable = false;
+
+                this->endPlayers[i].setColor(this->currentPlayer->getColor());
+
+                this->map.push_back(this->endPlayers[i]);
+
+                if(this->players.size() != 1){
+                    this->players.erase(this->players.begin());
+                    this->currentPlayer = &(this->players[0]);
+                } else {
+                    this->currentPlayer = nullptr;
+
+                    // TODO swap level
+                    printf("Swap level");
+                }
+            }
+        }
+
+        if(moveable){
+            this->currentPlayer->move(direction);
+        }
     }
 }
 
@@ -81,7 +118,7 @@ void Niveau::collision(){
             onSomething.push_back((int) verticalCollision.y);
             this->players[i].setJump(false);
         } else {
-            glm::vec2 newPos(this->players[i].getPosition().x, this->players[i].getPosition().y +this->gravity*this->players[i].getWeight()/10);
+            glm::vec2 newPos(this->players[i].getPosition().x, this->players[i].getPosition().y -this->gravity*this->players[i].getWeight()/10);
             this->players[i].setPosition(newPos);
             this->players[i].setJump(true);
         }

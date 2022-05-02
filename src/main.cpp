@@ -19,7 +19,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Les Cassoulettes", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Les Cassoulettes", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         return -1;
@@ -54,6 +54,13 @@ int main() {
     glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
         get_app(window).size_callback(width, height);
     });
+
+    // Force call the size_callback of the app to set the right viewport and projection matrix
+    {
+        int width, height;
+        glfwGetWindowSize(window, &width, &height);
+        app.size_callback(width, height);
+    }
 
     // Loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {

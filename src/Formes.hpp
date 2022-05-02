@@ -42,6 +42,12 @@ public:
     // Set d'une nouvelle position
     void setPosition(glm::vec2 p);
 
+    // Accès à la couleur
+    glm::vec3 getColor();
+
+    // Set d'une couleur
+    void setColor(glm::vec3 c);
+
     // Accès aux dimensions
     glm::vec2 getSize();
 

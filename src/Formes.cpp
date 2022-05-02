@@ -4,8 +4,8 @@
 
 #include <iostream>
 
-float vitesse = 20;
-float jump = 800;
+float vitesse = 0.05;
+float jump = 0.8;
 
 Rectangle::Rectangle(float hW, float hH, glm::vec3 c, glm::vec2 p){
     this->halfHeight = hH;
@@ -44,17 +44,17 @@ void Rectangle::move(int direction){
         break;
 
     case 2:
-        if(!this->isJumping) this->position.y -= jump/this->weight;
+        if(!this->isJumping) this->position.y += jump/this->weight;
         break;
 
     case 3:
         this->position.x += vitesse/weight;
-        if(!this->isJumping) this->position.y -= jump/this->weight;
+        if(!this->isJumping) this->position.y += jump/this->weight;
         break;
 
     case -3:
         this->position.x -= vitesse/weight;
-        if(!this->isJumping) this->position.y -= jump/this->weight;
+        if(!this->isJumping) this->position.y += jump/this->weight;
         break;
     
     default:
@@ -72,6 +72,14 @@ glm::vec2 Rectangle::getPosition(){
 
 void Rectangle::setPosition(glm::vec2 p){
     this->position = p;
+}
+
+glm::vec3 Rectangle::getColor(){
+    return this->color;
+}
+
+void Rectangle::setColor(glm::vec3 c){
+    this->color = c;
 }
 
 glm::vec2 Rectangle::getSize(){
@@ -145,8 +153,8 @@ void Triangle::draw(){
         for(int i = 0; i <= 3; i++) 
         {
             // TODO la variable M_PI ne fonctionne pas même avec l'include math.h, pourquoi ?
-            float x = this->position.x + this->rayon * cos(i * (2 * 3.14 / (float) 3)-0.55);
-            float y = this->position.y + this->rayon * sin(i * (2 * 3.14 / (float) 3)-0.55);
+            float x = this->position.x + this->rayon * cos(i * (2 * 3.14 / (float) 3)+0.5);
+            float y = this->position.y + this->rayon * sin(i * (2 * 3.14 / (float) 3)+0.5);
             glVertex2f(x, y);
         }
     glEnd();

@@ -4,6 +4,7 @@
 #include <string>
 
 #include "GLFW/glfw3.h"
+#include "glad/glad.h"
 #include "stb_image.h"
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
@@ -14,8 +15,25 @@
 #include "Niveau.hpp"
 #include "Variables.hpp"
 
-App::App() : _previousTime(0.0), _imageAngle(0.0f), _width(WIDTH), _height(HEIGHT) {
+App::App(): App(2.0f) {
+}
 
+App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(viewSize) {
+
+    // tips found here for absolut ressources path: https://shot511.github.io/2018-05-29-how-to-setup-opengl-project-with-cmake/
+    const std::string imagePath = std::string(ROOT_DIR) + "res/poulpile.jpg";
+
+    LoadImage(imagePath);
+
+    for (size_t i = 0; i < 349; i++)
+    {
+        this->pressed[i] = false;
+    }
+
+    this->levels = {&lvl1};
+}
+
+void App::LoadImage(const std::string& imagePath) {
     // Generate texture
     glGenTextures(1, &_textureId);
     glBindTexture(GL_TEXTURE_2D, _textureId);
@@ -28,8 +46,7 @@ App::App() : _previousTime(0.0), _imageAngle(0.0f), _width(WIDTH), _height(HEIGH
 
     // load and generate the texture
     int width, height, nrChannels;
-    // tips found here for absolut ressources path: https://shot511.github.io/2018-05-29-how-to-setup-opengl-project-with-cmake/
-    std::string imagePath = std::string(ROOT_DIR) + "res/poulpile.jpg";
+    
     unsigned char *data = stbi_load(imagePath.c_str(), &width, &height, &nrChannels, 0);
     if (data)
     {
@@ -41,13 +58,6 @@ App::App() : _previousTime(0.0), _imageAngle(0.0f), _width(WIDTH), _height(HEIGH
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
-
-    for (size_t i = 0; i < 349; i++)
-    {
-        this->pressed[i] = false;
-    }
-
-    this->levels = {&niv1};
 }
 
 void App::Update() {
@@ -61,25 +71,23 @@ void App::Update() {
 
     int direction = this->Controls();
 
-    niv1.collision();       
-    niv1.controls(direction);
+    lvl1.collision();       
+    lvl1.controls(direction);
     
     Render();
 }
 
 void App::Render() {
-    glClearColor(0.f, 0.f, 0.f, 1.f);
+    // Couleur du fond sans rien (ici gris)
+    glClearColor(0.3f, 0.3f, 0.3f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-    // Set up orphographic projection
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    // glOrtho(0, _width, _height, 0, -1, 1);
-    glOrtho(this->levels[0]->camera.x, _width + this->levels[0]->camera.x, _height + this->levels[0]->camera.y, this->levels[0]->camera.y, -1, 1);
+    
     glMatrixMode(GL_MODELVIEW);
 
-    const glm::vec2 halfSize(_width/2.f, _height/2.f);
+    glPushMatrix();
 
+    // Translation permettant de faire une caméra
+    glTranslatef(this->levels[0]->camera.x, this->levels[0]->camera.y, 0);
 
     // Exemple d'un rectangle
         // ici on trace le rectangle
@@ -87,8 +95,40 @@ void App::Render() {
 
     //Exemple d'un niveau
         // ici on pense bien à dessiner tous les personnages
-        niv1.drawPlayers();
-        niv1.drawMap();
+        lvl1.drawMap();
+        lvl1.drawPlayers();
+
+
+    // // Exemple Enguerrand
+    //     // render exemple quad
+    //     glColor3f(1.0f, 0.0f, 0.0f);
+    //     glBegin(GL_QUADS);
+    //         glVertex2f(-0.5f, -0.5f);
+    //         glVertex2f(0.5f, -0.5f);
+    //         glVertex2f(0.5f, 0.5f);
+    //         glVertex2f(-0.5f, 0.5f);
+    //     glEnd();
+
+    //     const float imageAngleRad = glm::radians(_imageAngle);
+    //     //Render the texture on the screen
+    //     glEnable(GL_TEXTURE_2D);
+    //     glBindTexture(GL_TEXTURE_2D, _textureId);
+    //     glColor3f(1.0f, 1.0f, 1.0f);
+    //     glBegin(GL_QUADS);
+    //         glm::vec2 upperLeft = glm::rotate(glm::vec2(-0.3f, -0.3f), imageAngleRad);
+    //         glTexCoord2d(0,0); glVertex2f(upperLeft.x, upperLeft.y);
+
+    //         glm::vec2 upperRight = glm::rotate(glm::vec2(0.3f, -0.3f), imageAngleRad);
+    //         glTexCoord2d(1,0); glVertex2f(upperRight.x, upperRight.y);
+
+    //         glm::vec2 bottomRight =  glm::rotate(glm::vec2(0.3f, 0.3f), imageAngleRad);
+    //         glTexCoord2d(1,1); glVertex2f(bottomRight.x, bottomRight.y);
+
+    //         glm::vec2 bottomLeft =  glm::rotate(glm::vec2(-0.3f, 0.3f), imageAngleRad);
+    //         glTexCoord2d(0,1); glVertex2f(bottomLeft.x, bottomLeft.y);
+    //     glEnd();
+    //     glDisable(GL_TEXTURE_2D);
+    glPopMatrix();
 }
 
 int App::Controls(){
@@ -114,7 +154,7 @@ int App::Controls(){
 }
 
 void App::key_callback(int key, int scancode, int action, int mods) {
-    std::cout << key << " was " << action << std::endl;
+    // std::cout << key << " was " << action << std::endl;
 
     if(action == GLFW_PRESS)
         this->pressed[key] = true;
@@ -137,6 +177,17 @@ void App::size_callback(int width, int height) {
 
     // make sure the viewport matches the new window dimensions
     glViewport(0, 0, _width, _height);
+
+    const float aspectRatio = _width / (float) _height;
+
+    // Change the projection matrix
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    if( aspectRatio > 1) {
+        glOrtho(-_viewSize / 2.0f * aspectRatio, _viewSize / 2.0f * aspectRatio, -_viewSize / 2.0f, _viewSize / 2.0f, -1.0f, 1.0f);
+    } else {
+        glOrtho(-_viewSize / 2.0f, _viewSize / 2.0f, -_viewSize / 2.0f / aspectRatio, _viewSize / 2.0f / aspectRatio, -1.0f, 1.0f);
+    }
 }
 
 glm::vec2 App::rotateVec2(const glm::vec2& vec, const glm::vec2& center, const float& angle) {
