@@ -63,10 +63,10 @@
     Rectangle murDLvl1(WIDTH*0.5, HEIGHT*1.5, noir, pMurD);
 
     glm::vec2 pObs1(WIDTH/2, -HEIGHT+0.3);
-    Rectangle obsLvl1(0.1, 0.1, noir, pObs1);
+    Rectangle obsLvl1(0.1, 0.11, noir, pObs1);
 
     glm::vec2 pObs2(WIDTH + (WIDTH/2), -HEIGHT+0.3);
-    Rectangle obs2Lvl1(0.1, 0.1, noir, pObs2);
+    Rectangle obs2Lvl1(0.1, 0.11, noir, pObs2);
 
     std::vector<Rectangle> mLvl1 ={solLvl1, plafondLvl1, murGLvl1, murDLvl1, obsLvl1, obs2Lvl1};
 

@@ -12,7 +12,10 @@ private:
     float weight = 0;
     float halfHeight;
     float halfWidth;
-    enum power;
+
+    // TODO pouvoir à gérer
+    // enum power;
+
     bool isJumping = false;
 public:
     // Constructeur
@@ -25,7 +28,7 @@ public:
     void draw();
 
     // Permet de calculer les collisions avec les autres persos et le décor
-    void collision();
+    void collision(Rectangle * other);
 
     // Permet de tourner le rectangle de 90°
     void rotation();
@@ -57,8 +60,8 @@ public:
     // Permet de gérer collision
     // TODO Quad Tree à faire
     // TODO surement collisions pas parfaites
-    glm::vec2 collisionLateral(std::vector<Rectangle> others);
-    glm::vec2 collisionVertical(std::vector<Rectangle> others);
+    // glm::vec2 collisionLateral(std::vector<Rectangle> others);
+    // glm::vec2 collisionVertical(std::vector<Rectangle> others);
 };
 
 class Triangle

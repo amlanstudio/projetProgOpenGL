@@ -97,69 +97,27 @@ void Niveau::controls(int direction){
 }
 
 void Niveau::collision(){
-    glm::vec2 sideCollision;
-    glm::vec2 verticalCollision;
-
     for (int i = 0; i < this->players.size(); i++)
     {
-        std::vector<int> onSomething;
-        std::vector<Rectangle> all = this->map;
+        std::vector<Rectangle*> all;
+
+        for (size_t m = 0; m < this->map.size() ; m++)
+        {
+            all.push_back(&(this->map[m]));
+        }
+        
+
         for (int j = 0; j < this->players.size(); j++)
         {
             if (&(this->players[j]) != &(this->players[i]))
             {
-                all.push_back(this->players[j]);
+                all.push_back(&(this->players[j]));
             } 
         }
 
-        verticalCollision = this->players[i].collisionVertical(all);
-
-        if(verticalCollision.x){
-            onSomething.push_back((int) verticalCollision.y);
-            this->players[i].setJump(false);
-        } else {
-            glm::vec2 newPos(this->players[i].getPosition().x, this->players[i].getPosition().y -this->gravity*this->players[i].getWeight()/10);
-            this->players[i].setPosition(newPos);
-            this->players[i].setJump(true);
-        }
-
-        if(&(this->players[i]) == this->currentPlayer){
-            sideCollision = this->currentPlayer->collisionLateral(all);
-
-            std::vector<int>::iterator where = find(onSomething.begin(), onSomething.end(), sideCollision.y);
-
-            all.erase(all.begin()+ sideCollision.y);
-
-            if(where != onSomething.end() && *where == sideCollision.y){
-            // je veux supprimer sideCollision.y de mon tableau
-                onSomething.erase(onSomething.begin());
-            }
-
-            sideCollision = this->currentPlayer->collisionLateral(all);
-
-            where = find(onSomething.begin(), onSomething.end(), sideCollision.y);
-
-            if(where != onSomething.end())std::cout<< *where <<std::endl;
-
-            // TODO trouver solution
-
-            if(where == onSomething.end() && sideCollision.x != 0)
-            {                
-                if(sideCollision.x == -1){
-                    glm::vec2 newPos(all[sideCollision.y].getPosition().x - all[sideCollision.y].getSize().x - this->currentPlayer->getSize().x, this->currentPlayer->getPosition().y);
-                    this->currentPlayer->setPosition(newPos);
-                }
-                
-                if (sideCollision.x == 1){
-                    glm::vec2 newPos(all[sideCollision.y].getPosition().x + all[sideCollision.y].getSize().x + this->currentPlayer->getSize().x, this->currentPlayer->getPosition().y);
-                    this->currentPlayer->setPosition(newPos);
-                }
-            } 
-
-            if(where != onSomething.end() && *where == sideCollision.y){
-            // je veux supprimer sideCollision.y de mon tableau
-                onSomething.erase(onSomething.begin());
-            }
+        for (size_t a = 0; a < all.size(); a++)
+        {
+            this->players[i].collision(all[a]);
         }
     }
 }

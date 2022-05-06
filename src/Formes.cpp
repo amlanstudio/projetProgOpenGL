@@ -32,6 +32,46 @@ void Rectangle::draw(){
     glEnd();
 }
 
+void Rectangle::collision(Rectangle* other){
+    if(
+        this->position.y - this->halfHeight > other->position.y + other->halfHeight ||
+        this->position.y + this->halfHeight < other->position.y - other->halfHeight ||
+        this->position.x - this->halfWidth > other->position.x + other->halfWidth ||
+        this->position.x + this->halfWidth < other->position.x - other->halfWidth
+    ){
+        glm::vec2 newPos(this->getPosition().x, this->getPosition().y -0.01 * this->getWeight()/50);
+        this->setPosition(newPos);
+        // this->setJump(true);
+
+        return;
+    }
+
+    if(
+        this->position.y - this->halfHeight <= other->position.y + other->halfHeight && this->position.y - this->halfHeight >= other->position.y - other->halfHeight
+    ){
+        this->isJumping = false;
+
+        glm::vec2 newPos(this->getPosition().x, other->getPosition().y + other->getSize().y + this->getSize().y);
+
+        this->setPosition(newPos);
+    } else if(
+        this->position.y + this->halfHeight >= other->position.y - other->halfHeight && this->position.y + this->halfHeight <= other->position.y + other->halfHeight
+    ) {
+        glm::vec2 newPos(this->getPosition().x, other->getPosition().y - other->getSize().y - this->getSize().y);
+        this->setPosition(newPos);
+    }else if(
+        this->position.x + this->halfWidth >= other->position.x - other->halfWidth && this->position.x + this->halfWidth <= other->position.x + other->halfWidth
+    ) {
+        glm::vec2 newPos(other->position.x - other->halfWidth - this->halfWidth , this->position.y);
+        this->setPosition(newPos);
+    } else if(
+        this->position.x - this->halfWidth <= other->position.x + other->halfWidth && this->position.x - this->halfWidth >= other->position.x - other->halfWidth
+    ) {
+        glm::vec2 newPos(other->position.x + other->halfWidth + this->halfWidth , this->position.y);
+        this->setPosition(newPos);
+    }
+}
+
 void Rectangle::move(int direction){
     switch (direction)
     {
@@ -91,6 +131,8 @@ float Rectangle::getWeight(){
     return this->weight;
 }
 
+/*
+
 glm::vec2 Rectangle::collisionLateral(std::vector<Rectangle> others){
     for (int i = 0; i < others.size(); i++)
     {
@@ -138,6 +180,8 @@ glm::vec2 Rectangle::collisionVertical(std::vector<Rectangle> others){
     glm::vec2 retour(0, 0);
     return retour;
 }
+
+*/
 
 Triangle::Triangle(float r, glm::vec3 c, glm::vec2 p){
     this->rayon = r;
