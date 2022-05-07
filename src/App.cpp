@@ -85,8 +85,12 @@ void App::Render() {
 
     glPushMatrix();
 
+    // glScalef(0.1f, 0.1f, 0.1f);
+
     // Translation permettant de faire une caméra
-    glTranslatef(this->levels[0]->camera.x, this->levels[0]->camera.y, 0);
+    // glTranslatef(this->levels[0]->camera.x, this->levels[0]->camera.y, 0);
+
+    
 
     // Exemple d'un rectangle
         // ici on trace le rectangle
@@ -94,19 +98,19 @@ void App::Render() {
 
     //Exemple d'un niveau
         // ici on pense bien à dessiner tous les personnages
-        lvl1.drawMap();
-        lvl1.drawPlayers();
+        // lvl1.drawMap();
+        // lvl1.drawPlayers();
 
 
     // // Exemple Enguerrand
     //     // render exemple quad
-    //     glColor3f(1.0f, 0.0f, 0.0f);
-    //     glBegin(GL_QUADS);
-    //         glVertex2f(-0.5f, -0.5f);
-    //         glVertex2f(0.5f, -0.5f);
-    //         glVertex2f(0.5f, 0.5f);
-    //         glVertex2f(-0.5f, 0.5f);
-    //     glEnd();
+        glColor3f(1.0f, 0.0f, 0.0f);
+        glBegin(GL_QUADS);
+            glVertex2f(-0.5f, -0.5f);
+            glVertex2f(0.5f, -0.5f);
+            glVertex2f(0.5f, 0.5f);
+            glVertex2f(-0.5f, 0.5f);
+        glEnd();
 
     //     const float imageAngleRad = glm::radians(_imageAngle);
     //     //Render the texture on the screen
