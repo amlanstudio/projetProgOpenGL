@@ -1,6 +1,7 @@
 #include "Niveau.hpp"
 #include <iostream>
 #include "Window.hpp"
+#include "GLFW/glfw3.h"
 
 Niveau::Niveau(std::vector<Rectangle> players){
     this->players = players;
@@ -60,53 +61,62 @@ void Niveau::drawMap(){
     }
 }
 
-void Niveau::controls(int direction){
+void Niveau::controls(bool * pressed, double time){
 
-    if(direction == 9){
-        printf("Changement de joueur");
+    this->camera.x = - this->currentPlayer->getPosition().x;
+    this->camera.y = - this->currentPlayer->getPosition().y - 0.6f;
+        
+    bool moveable = true;
+    for(size_t i=0; i<this->endPlayers.size(); i++){
+        if((float)this->currentPlayer->getPosition().x >= (float)this->endPlayers[i].getPosition().x - 0.01 && 
+        (float)this->currentPlayer->getPosition().x <= (float)this->endPlayers[i].getPosition().x + 0.01 && 
+        (float)this->currentPlayer->getPosition().y >= (float)this->endPlayers[i].getPosition().y - 0.01 &&
+        (float)this->currentPlayer->getPosition().y <= (float)this->endPlayers[i].getPosition().y + 0.01
+        ){
+            moveable = false;
+
+            this->endPlayers[i].setColor(this->currentPlayer->getColor());
+
+            this->map.push_back(this->endPlayers[i]);
+
+            if(this->players.size() != 1){
+                this->players.erase(this->players.begin());
+                this->currentPlayer = &(this->players[0]);
+            } else {
+                this->currentPlayer = nullptr;
+
+                // TODO swap level
+                printf("Swap level");
+            }
+        }
+    }
+
+    for(size_t i = 0; i<this->players.size(); i++){
+        this->players[i].savePosition();
+    }
+
+    if(moveable){
+        this->currentPlayer->move(pressed, time);
+    }
+
+    for(size_t i = 0; i<this->players.size(); i++){
+        this->players[i].applyGravity(this->gravity, time);
+        this->players[i].setPosition(glm::vec2(this->players[i].getPosition().x, this->players[i].getPosition().y + this->players[i].velocity * time));
+    }
+}
+
+void Niveau::key_callback(int key, int scancode, int action, int mods){
+    if(key == GLFW_KEY_TAB && action == GLFW_PRESS){
+        printf("Changement de joueur\n");
         this->players.push_back(*(this->currentPlayer));
         this->players.erase(this->players.begin());
         this->currentPlayer = &(this->players[0]);
-    } else {
-        this->camera.x = - this->currentPlayer->getPosition().x;
-        this->camera.y = - this->currentPlayer->getPosition().y - 0.6f;
-        
-        bool moveable = true;
-        for(size_t i=0; i<this->endPlayers.size(); i++){
-            if((float)this->currentPlayer->getPosition().x >= (float)this->endPlayers[i].getPosition().x - 0.01 && 
-            (float)this->currentPlayer->getPosition().x <= (float)this->endPlayers[i].getPosition().x + 0.01 && 
-            (float)this->currentPlayer->getPosition().y >= (float)this->endPlayers[i].getPosition().y - 0.01 &&
-            (float)this->currentPlayer->getPosition().y <= (float)this->endPlayers[i].getPosition().y + 0.01
-            ){
-                moveable = false;
+    }
 
-                this->endPlayers[i].setColor(this->currentPlayer->getColor());
+    if(key == GLFW_KEY_R && action == GLFW_PRESS){
+        this->currentPlayer->rotation();
 
-                this->map.push_back(this->endPlayers[i]);
-
-                if(this->players.size() != 1){
-                    this->players.erase(this->players.begin());
-                    this->currentPlayer = &(this->players[0]);
-                } else {
-                    this->currentPlayer = nullptr;
-
-                    // TODO swap level
-                    printf("Swap level");
-                }
-            }
-        }
-
-        for(size_t i = 0; i<this->players.size(); i++){
-            this->players[i].oldPosition = this->players[i].position;
-        }
-
-        if(moveable){
-            this->currentPlayer->move(direction);
-        }
-
-        for(size_t i = 0; i<this->players.size(); i++){
-            this->players[i].applyGravity(this->gravity);
-        }
+        collision();
     }
 }
 

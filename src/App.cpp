@@ -68,10 +68,8 @@ void App::Update() {
     
     // update imageAngle (use elapsedTime to update without being dependent on the frame rate)
     _imageAngle = fmod(_imageAngle + 10.0f * (float)elapsedTime, 360.0f);
-
-    int direction = this->Controls();
        
-    lvl1.controls(direction);
+    lvl1.controls(this->pressed, elapsedTime);
     
     lvl1.collision();
     
@@ -132,28 +130,6 @@ void App::Render() {
     glPopMatrix();
 }
 
-int App::Controls(){
-    // scancode haut : H
-    // scancode bas : P
-    // scancode gauche : K
-    // scancode droite : M
-    // scancode TAB : 15
-
-    int direction = 0;
-
-    // TAB
-    if(this->pressed[258]) direction = 9;
-    else if(this->pressed[265] && this->pressed[262]) direction = 3;
-    else if(this->pressed[265] && this->pressed[263]) direction = -3;
-
-    else if(this->pressed[265]) direction = 2;
-    else if(this->pressed[262]) direction = 1;
-    else if(this->pressed[263]) direction = -1;
-    else direction = 0;
-
-    return direction;
-}
-
 void App::key_callback(int key, int scancode, int action, int mods) {
     // std::cout << key << " was " << action << std::endl;
 
@@ -161,6 +137,9 @@ void App::key_callback(int key, int scancode, int action, int mods) {
         this->pressed[key] = true;
     else if(action == GLFW_RELEASE)
         this->pressed[key] = false;
+
+    // function qui permet d'envoyer les keycode au niveau
+    lvl1.key_callback(key, scancode, action, mods);
 }
 
 void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/) {

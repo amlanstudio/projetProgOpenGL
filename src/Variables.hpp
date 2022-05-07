@@ -73,7 +73,7 @@
     // Players
     // TODO à ajuster
     Rectangle playerLvl1(0.1, 0.1, jaune, p, w);
-    Rectangle player2Lvl1(0.1, 0.2, rouge, pos, w);
+    Rectangle player2Lvl1(0.1f, 0.2f, rouge, pos, w, Power::Rotate);
 
     std::vector<Rectangle> playersLvl1 = {playerLvl1, player2Lvl1};
 

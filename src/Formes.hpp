@@ -4,28 +4,31 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+enum class Power{
+    Rotate,
+    Nothing
+};
+
 class Rectangle
 {
 private:
     glm::vec3 color;
+    glm::vec2 position;
+    glm::vec2 oldPosition;
 
     float weight = 0;
     float halfHeight;
     float halfWidth;
 
-    // TODO pouvoir à gérer
-    // enum power;
+    // TODO destroy à gérer
+    Power power;
 
     bool isJumping = false;
 public:
-    glm::vec2 position;
-    glm::vec2 oldPosition;
-    // Constructeur
-    Rectangle(float hW, float hH, glm::vec3 c, glm::vec2 p);
+    float velocity = 0;
+    // Constructeur avec poids optionnel
+    Rectangle(float hW, float hH, glm::vec3 c, glm::vec2 p, float w = 0.0f, Power pow = Power::Nothing);
     
-    // Constructeur avec poids
-    Rectangle(float hW, float hH, glm::vec3 c, glm::vec2 p, float w);
-
     // Tracé de la forme
     void draw();
 
@@ -35,11 +38,14 @@ public:
     // Permet de tourner le rectangle de 90°
     void rotation();
 
+    // Fonction de saut
+    void jump();
+
     // Permet de déplacer le personnage
-    void move(int direction); 
+    void move(bool *  pressed, double time); 
 
     // Application de la gravité
-    void applyGravity(float gravity);
+    void applyGravity(float gravity, double time);
 
     // Permet de dire si le personnage saute ou pas
     void setJump(bool jumping);
@@ -49,6 +55,8 @@ public:
 
     // Set d'une nouvelle position
     void setPosition(glm::vec2 p);
+
+    void savePosition();
 
     // Accès à la couleur
     glm::vec3 getColor();
@@ -61,12 +69,6 @@ public:
 
     // Accès au poids
     float getWeight();
-
-    // Permet de gérer collision
-    // TODO Quad Tree à faire
-    // TODO surement collisions pas parfaites
-    // glm::vec2 collisionLateral(std::vector<Rectangle> others);
-    // glm::vec2 collisionVertical(std::vector<Rectangle> others);
 };
 
 class Triangle

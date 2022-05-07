@@ -2,27 +2,22 @@
 #include "glad/glad.h"
 
 #include <glm/gtc/constants.hpp>
+#include "GLFW/glfw3.h"
 
 #include <iostream>
 
 float vitesse = 0.05f;
-float jump = 0.1f;
+float jump = 0.01f;
+int jumpTimer = 0;
 
-Rectangle::Rectangle(float hW, float hH, glm::vec3 c, glm::vec2 p){
-    this->halfHeight = hH;
-    this->halfWidth = hW;
-    this->color = c;
-    this->position = p;
-    this->oldPosition = p;
-}
-
-Rectangle::Rectangle(float hW, float hH, glm::vec3 c, glm::vec2 p, float w){
+Rectangle::Rectangle(float hW, float hH, glm::vec3 c, glm::vec2 p, float w, Power pow){
     this->halfHeight = hH;
     this->halfWidth = hW;
     this->color = c;
     this->position = p;
     this->oldPosition = p;
     this->weight = w;
+    power = pow;
 }
 
 void Rectangle::draw(){
@@ -64,62 +59,35 @@ void Rectangle::collision(Rectangle* other){
     ) {
         this->position.x = other->position.x - other->halfWidth - this->halfWidth;
     }
-
-    // if(
-    //     this->position.y - this->halfHeight < other->position.y + other->halfHeight && this->oldPosition.y > this->position.y
-    // ){
-    //     this->isJumping = false;
-
-    //     this->position.y = other->position.y + other->halfHeight + this->halfHeight+0.0001f;
-    // } else if(
-    //     this->position.y + this->halfHeight > other->position.y - other->halfHeight && this->oldPosition.y < this->position.y
-    // ) {
-    //     this->position.y = other->position.y - other->halfHeight - this->halfHeight-0.0001f;
-    // }else if(
-    //     this->position.x - this->halfWidth < other->position.x + other->halfWidth && this->oldPosition.x > this->position.x
-    // ) {
-    //     this->position.x = other->position.x + other->halfWidth + this->halfWidth+0.0001f;
-    // }else if(
-    //     this->position.x + this->halfWidth > other->position.x - other->halfWidth && this->oldPosition.x < this->position.x 
-    // ) {
-    //     this->position.x = other->position.x - other->halfWidth - this->halfWidth-0.0001f;
-    // }
-
 }
 
-void Rectangle::move(int direction){
+void Rectangle::rotation(){
+    if(power == Power::Rotate){
+        float tempWidth = halfWidth;
+        halfWidth = halfHeight;
+        halfHeight = tempWidth;
 
-    switch (direction)
-    {
-    case -1:
-        this->position.x -= vitesse/weight;
-        break;
-        
-    case 1:
-        this->position.x += vitesse/weight;
-        break;
-
-    case 2:
-        if(!this->isJumping) this->position.y += jump/this->weight;
-        break;
-
-    case 3:
-        this->position.x += vitesse/weight;
-        if(!this->isJumping) this->position.y += jump/this->weight;
-        break;
-
-    case -3:
-        this->position.x -= vitesse/weight;
-        if(!this->isJumping) this->position.y += jump/this->weight;
-        break;
-    
-    default:
-        break;
+        position.y += halfHeight;
     }
+};
+
+void Rectangle::jump(){
+    velocity = 1.f;
 }
 
-void Rectangle::applyGravity(float gravity){
-    this->position.y = this->position.y - gravity * this->getWeight()/50;
+void Rectangle::move(bool * pressed, double time){
+
+    if(pressed[GLFW_KEY_UP] && !this->isJumping){
+        this->jump();
+        isJumping = true;
+    }
+
+    if(pressed[GLFW_KEY_LEFT]) this->position.x -= vitesse/weight;
+    if(pressed[GLFW_KEY_RIGHT]) this->position.x += vitesse/weight;
+}
+
+void Rectangle::applyGravity(float gravity, double time){
+    velocity -= gravity * this->getWeight()/50;
 }
 
 void Rectangle::setJump(bool jumping){
@@ -132,6 +100,10 @@ glm::vec2 Rectangle::getPosition(){
 
 void Rectangle::setPosition(glm::vec2 p){
     this->position = p;
+}
+
+void Rectangle::savePosition(){
+    oldPosition = position;
 }
 
 glm::vec3 Rectangle::getColor(){
@@ -151,58 +123,6 @@ float Rectangle::getWeight(){
     return this->weight;
 }
 
-/*
-
-glm::vec2 Rectangle::collisionLateral(std::vector<Rectangle> others){
-    for (int i = 0; i < others.size(); i++)
-    {
-        std::vector<Rectangle> col = {others[i]};
-        if((this->position.x - this->halfWidth <= others[i].position.x + others[i].halfWidth &&
-        this->position.x + this->halfWidth >= others[i].position.x - others[i].halfWidth &&
-        this->position.y - this->halfHeight <= others[i].position.y + others[i].halfHeight &&
-        this->position.y + this->halfHeight >= others[i].position.y - others[i].halfHeight))
-        {
-            //si le character vient vers la gauche
-            if(this->position.x - this->halfWidth < others[i].position.x + others[i].halfWidth-10)
-            {
-                glm::vec2 retour(-1, i);
-                return retour;
-            }
-            //s'il est a droite 
-            else if(this->position.x + this->halfWidth > others[i].position.x - others[i].halfWidth)
-            {
-                glm::vec2 retour(1, i);
-                return retour;
-            } 
-        }
-    }
-    glm::vec2 retour(0, 0);
-    return retour;
-}
-
-glm::vec2 Rectangle::collisionVertical(std::vector<Rectangle> others){
-    for (int i = 0; i < others.size(); i++)
-    {
-        if((this->position.x - this->halfWidth <= others[i].position.x + others[i].halfWidth &&
-        this->position.x + this->halfWidth >= others[i].position.x - others[i].halfWidth &&
-        this->position.y - this->halfHeight <= others[i].position.y + others[i].halfHeight &&
-        this->position.y + this->halfHeight >= others[i].position.y - others[i].halfHeight))
-        {
-            if(this->position.y+this->halfHeight >= others[i].position.y - others[i].halfHeight - 10){
-                glm::vec2 retour(1, i);
-                return retour;
-            } else {
-                glm::vec2 retour(0, -1);
-                return retour;
-            }
-        }
-    }
-    glm::vec2 retour(0, 0);
-    return retour;
-}
-
-*/
-
 Triangle::Triangle(float r, glm::vec3 c, glm::vec2 p){
     this->rayon = r;
     this->color = c;
@@ -216,7 +136,6 @@ void Triangle::draw(){
 
         for(int i = 0; i <= 3; i++) 
         {
-            // TODO la variable M_PI ne fonctionne pas même avec l'include math.h, pourquoi ?
             float x = this->position.x + this->rayon * cos(i * (2.0f * glm::pi<float>() / 3.f)+0.5f);
             float y = this->position.y + this->rayon * sin(i * (2.0f * glm::pi<float>() / 3.f)+0.5f);
             glVertex2f(x, y);

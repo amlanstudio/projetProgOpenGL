@@ -12,8 +12,6 @@ public:
     App();
     App(float viewSize);
     void Update();
-
-    int Controls();
     
     // callbacks users input
     void key_callback(int key, int scancode, int action, int mods);

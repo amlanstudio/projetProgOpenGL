@@ -35,8 +35,13 @@ public:
     void drawPlayers();
 
     // Permet de gérer les players
-    void controls(int direction);
+    void controls(bool * pressed, double time);
 
-    // Permet de gérer les collisions (verticales déjà)
+    // Permet de gérer les events
+    void key_callback(int key, int scancode, int action, int mods);
+
+    // Permet de gérer les collisions
     void collision();
+
+    // TODO Quad Tree à faire
 };
