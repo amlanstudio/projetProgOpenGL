@@ -14,8 +14,8 @@ int main() {
     // Create a windowed mode window and its OpenGL context
 #ifdef __APPLE__
     // We need to explicitly ask for a 3.3 context on Mac
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
@@ -68,6 +68,17 @@ int main() {
 
         // Swap front and back buffers
         glfwSwapBuffers(window);
+
+        #ifdef __APPLE__
+            static bool macMoved = false;
+
+            if(!macMoved) {
+                int x, y;
+                glfwGetWindowPos(window, &x, &y);
+                glfwSetWindowPos(window, ++x, y);
+                macMoved = true;
+            }
+        #endif
 
         // Poll for and process events
         glfwPollEvents();
