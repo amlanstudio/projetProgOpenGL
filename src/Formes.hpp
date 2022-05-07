@@ -8,7 +8,7 @@ class Rectangle
 {
 private:
     glm::vec3 color;
-    glm::vec2 position;
+
     float weight = 0;
     float halfHeight;
     float halfWidth;
@@ -18,6 +18,8 @@ private:
 
     bool isJumping = false;
 public:
+    glm::vec2 position;
+    glm::vec2 oldPosition;
     // Constructeur
     Rectangle(float hW, float hH, glm::vec3 c, glm::vec2 p);
     
@@ -35,6 +37,9 @@ public:
 
     // Permet de déplacer le personnage
     void move(int direction); 
+
+    // Application de la gravité
+    void applyGravity(float gravity);
 
     // Permet de dire si le personnage saute ou pas
     void setJump(bool jumping);

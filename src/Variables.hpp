@@ -13,15 +13,15 @@
     glm::vec2 p(0, 0);
 
     // ici son poids
-    float w = 5;
+    float w = 5.0f;
 
     // ici on construit le rectangle
-    Rectangle test(0.1, 0.1, c, p, w);
+    Rectangle test(0.1f, 0.1f, c, p, w);
 
     glm::vec3 g(0, 1, 0);
 
     glm::vec2 pos(-0.5, 0);
-    Rectangle p2(0.1, 0.2, g, pos, w);
+    Rectangle p2(0.1f, 0.2f, g, pos, w);
 
 
 // Création d'un sol
@@ -40,7 +40,7 @@
     // Niveau niv1(pLvl1, mLvl1, 10);
     
     // ici on construit le niveau avec ses personnages et son décor sa gravité et sa camera
-    Niveau niv1(pLvl1, mLvlT, 0.1);
+    Niveau niv1(pLvl1, mLvlT, 0.1f);
 
 // Test Level 1 définitif
     // Map

@@ -70,9 +70,10 @@ void App::Update() {
     _imageAngle = fmod(_imageAngle + 10.0f * (float)elapsedTime, 360.0f);
 
     int direction = this->Controls();
-
-    lvl1.collision();       
+       
     lvl1.controls(direction);
+    
+    lvl1.collision();
     
     Render();
 }

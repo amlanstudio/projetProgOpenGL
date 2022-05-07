@@ -1,6 +1,5 @@
 #pragma once
-#ifndef NIVEAU_H
-#define NIVEAU_H
+
 #include <vector>
 #include "Formes.hpp"
 #include <glm/glm.hpp>
@@ -41,5 +40,3 @@ public:
     // Permet de gérer les collisions (verticales déjà)
     void collision();
 };
-
-#endif

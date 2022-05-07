@@ -7,15 +7,20 @@ Niveau::Niveau(std::vector<Rectangle> players){
     this->currentPlayer = &(this->players[0]);
 }
 
-Niveau::Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float g){
-    this->players = players;
-    this->currentPlayer = &(this->players[0]);
-    this->map = map;
-    this->gravity = g;
+// Niveau::Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float g) {
+//     this->players = players;
+//     this->currentPlayer = &(this->players[0]);
+//     this->map = map;
+//     this->gravity = g;
+//     this->camera = glm::vec2(0, 0);
+// }
 
-    glm::vec2 newC(0, 0);
-    this->camera = newC;
-}
+Niveau::Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float g): 
+players(players), 
+currentPlayer(&(this->players[0])), 
+map(map), 
+gravity(g), 
+camera(0, 0) {}
 
 Niveau::Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float g, std::vector<Rectangle> end){
     this->players = players;
@@ -30,7 +35,7 @@ Niveau::Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float
 }
 
 void Niveau::drawPlayers(){
-    for(int i = 0; i<this->players.size(); i++){
+    for(size_t i = 0; i<this->players.size(); i++){
         this->players[i].draw();
     }
 
@@ -40,22 +45,23 @@ void Niveau::drawPlayers(){
 
         // ici sa position
         glm::vec2 p(this->currentPlayer->getPosition());
-        p.y += this->currentPlayer->getSize().y + 0.1;
-        Triangle showPlayer(0.05, c, p);
+        p.y += this->currentPlayer->getSize().y + 0.1f;
+        Triangle showPlayer(0.05f, c, p);
         showPlayer.draw();
 }
 
 void Niveau::drawMap(){
-    for(int i = 0; i<this->map.size(); i++){
+    for(size_t i = 0; i<this->map.size(); i++){
         this->map[i].draw();
     }
     
-    for(int i = 0; i<this->endPlayers.size(); i++){
+    for(size_t i = 0; i<this->endPlayers.size(); i++){
         this->endPlayers[i].draw();
     }
 }
 
 void Niveau::controls(int direction){
+
     if(direction == 9){
         printf("Changement de joueur");
         this->players.push_back(*(this->currentPlayer));
@@ -63,10 +69,10 @@ void Niveau::controls(int direction){
         this->currentPlayer = &(this->players[0]);
     } else {
         this->camera.x = - this->currentPlayer->getPosition().x;
-        this->camera.y = - this->currentPlayer->getPosition().y - 0.6;
+        this->camera.y = - this->currentPlayer->getPosition().y - 0.6f;
         
         bool moveable = true;
-        for(int i=0; i<this->endPlayers.size(); i++){
+        for(size_t i=0; i<this->endPlayers.size(); i++){
             if((float)this->currentPlayer->getPosition().x >= (float)this->endPlayers[i].getPosition().x - 0.01 && 
             (float)this->currentPlayer->getPosition().x <= (float)this->endPlayers[i].getPosition().x + 0.01 && 
             (float)this->currentPlayer->getPosition().y >= (float)this->endPlayers[i].getPosition().y - 0.01 &&
@@ -90,34 +96,44 @@ void Niveau::controls(int direction){
             }
         }
 
+        for(size_t i = 0; i<this->players.size(); i++){
+            this->players[i].oldPosition = this->players[i].position;
+        }
+
         if(moveable){
             this->currentPlayer->move(direction);
+        }
+
+        for(size_t i = 0; i<this->players.size(); i++){
+            this->players[i].applyGravity(this->gravity);
         }
     }
 }
 
 void Niveau::collision(){
-    for (int i = 0; i < this->players.size(); i++)
+    std::vector<Rectangle*> all;
+
+    for (size_t m = 0; m < this->map.size() ; m++)
     {
-        std::vector<Rectangle*> all;
+        all.push_back(&(this->map[m]));
+    }
 
-        for (size_t m = 0; m < this->map.size() ; m++)
-        {
-            all.push_back(&(this->map[m]));
-        }
-        
-
-        for (int j = 0; j < this->players.size(); j++)
-        {
-            if (&(this->players[j]) != &(this->players[i]))
-            {
-                all.push_back(&(this->players[j]));
-            } 
-        }
-
+    for(size_t p = 1; p<this->players.size(); p++)
+    {
         for (size_t a = 0; a < all.size(); a++)
         {
-            this->players[i].collision(all[a]);
+            this->players[p].collision(all[a]);
         }
     }
+        
+    for (size_t j = 1; j < this->players.size(); j++)
+    {
+        all.push_back(&(this->players[j]));
+    }
+
+
+    for (size_t a = 0; a < all.size(); a++)
+    {
+        this->currentPlayer->collision(all[a]);
+    }    
 }
