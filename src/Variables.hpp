@@ -5,6 +5,8 @@
 #include "Formes.hpp"
 #include "Window.hpp"
 
+// TODO fonction init à appeler dans App.cpp
+
 // Exemple d'un rectangle
     // ici sa couleur normalisée entre 0 et 1
     glm::vec3 c(1, 1, 1);
@@ -51,15 +53,15 @@
     glm::vec3 rougeBlur(0.5, 0, 0);
 
     glm::vec2 pSol1(WIDTH, -HEIGHT);
-    Rectangle solLvl1(WIDTH*2, HEIGHT/5, noir, pSol1);
+    Rectangle solLvl1(WIDTH*1.8, HEIGHT/5, noir, pSol1);
 
     glm::vec2 pPlafond1(WIDTH, HEIGHT);
-    Rectangle plafondLvl1(WIDTH*2, HEIGHT/5, noir, pPlafond1);
+    Rectangle plafondLvl1(WIDTH*1.8, HEIGHT/5, noir, pPlafond1);
 
-    glm::vec2 pMurG(-WIDTH*1.5, 0);
+    glm::vec2 pMurG(-WIDTH*1.2, 0);
     Rectangle murGLvl1(WIDTH*0.5, HEIGHT*1.5, noir, pMurG);
     
-    glm::vec2 pMurD(WIDTH*3.5, 0);
+    glm::vec2 pMurD(WIDTH*3.2, 0);
     Rectangle murDLvl1(WIDTH*0.5, HEIGHT*1.5, noir, pMurD);
 
     glm::vec2 pObs1(WIDTH/2, -HEIGHT+0.3);

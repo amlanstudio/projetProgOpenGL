@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Formes.hpp"
+#include "Quadtree.hpp"
 #include <glm/glm.hpp>
 
 class Niveau
@@ -13,6 +14,8 @@ private:
    Rectangle* currentPlayer;
 
    std::vector<Rectangle> endPlayers;
+
+   Quadtree* quadtree;
 
 public:
 
@@ -42,6 +45,4 @@ public:
 
     // Permet de gérer les collisions
     void collision();
-
-    // TODO Quad Tree à faire
 };

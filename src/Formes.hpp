@@ -35,6 +35,9 @@ public:
     // Permet de calculer les collisions avec les autres persos et le décor
     void collision(Rectangle * other);
 
+    // Permet de voir si il contient un autre élément
+    bool contains(Rectangle * element);
+
     // Permet de tourner le rectangle de 90°
     void rotation();
 
@@ -69,6 +72,14 @@ public:
 
     // Accès au poids
     float getWeight();
+
+        
+    
+    float top();
+    float bottom();
+    float left();
+    float right();
+
 };
 
 class Triangle

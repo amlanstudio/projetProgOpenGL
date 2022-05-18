@@ -61,6 +61,38 @@ void Rectangle::collision(Rectangle* other){
     }
 }
 
+bool Rectangle::contains(Rectangle * element){
+    //si l'angle up L de element est dans le rectangle
+    // ou si l'angle up R de element est dans le rectangle
+    // ou si l'angle bottom L de element est dans le rectangle
+    // ou si l'angle bottom R de element est dans le rectangle
+
+    // return (element->position.x - element->halfWidth > position.x - halfWidth && element->position.x - element->halfWidth < position.x + halfWidth && element->position.y + element->halfHeight > position.y + halfHeight && element->position.y + element->halfHeight < position.y - halfHeight);
+
+    // printf("e %f %f %f %f\n", element->top(), element->bottom(), element->left(), element->right());
+    // printf("this %f %f %f %f\n", top(), bottom(), left(), right());
+
+    return (
+    element->position.x - element->halfWidth > position.x - halfWidth && element->position.x - element->halfWidth < position.x + halfWidth && 
+    element->position.y + element->halfHeight > position.y - halfHeight && element->position.y + element->halfHeight < position.y + halfHeight
+
+    ||
+
+    element->position.x + element->halfWidth > position.x - halfWidth && element->position.x + element->halfWidth < position.x + halfWidth && 
+    element->position.y + element->halfHeight > position.y - halfHeight && element->position.y + element->halfHeight < position.y + halfHeight
+
+    ||
+
+    element->position.x - element->halfWidth > position.x - halfWidth && element->position.x - element->halfWidth < position.x + halfWidth && 
+    element->position.y - element->halfHeight > position.y - halfHeight && element->position.y - element->halfHeight < position.y + halfHeight
+
+    ||
+
+    element->position.x + element->halfWidth > position.x - halfWidth && element->position.x + element->halfWidth < position.x + halfWidth && 
+    element->position.y - element->halfHeight > position.y - halfHeight && element->position.y - element->halfHeight < position.y + halfHeight
+    );
+}
+
 void Rectangle::rotation(){
     if(power == Power::Rotate){
         float tempWidth = halfWidth;
@@ -142,3 +174,23 @@ void Triangle::draw(){
         }
     glEnd();
 }
+
+    float Rectangle::top()
+    {
+        return position.y + halfHeight;
+    }
+
+    float Rectangle::bottom()
+    {
+        return position.y - halfHeight;
+    }
+ 
+    float Rectangle::left()
+    {
+        return position.x - halfWidth;
+    }
+
+    float Rectangle::right()
+    {
+        return position.x + halfWidth;
+    }

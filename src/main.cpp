@@ -63,7 +63,7 @@ int main() {
     }
 
     // Loop until the user closes the window
-    while (!glfwWindowShouldClose(window)) {
+    while (app.currentState != State::Quit && !glfwWindowShouldClose(window)) {
         app.Update();
 
         // Swap front and back buffers

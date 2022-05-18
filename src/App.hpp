@@ -7,6 +7,12 @@
 
 #include "Niveau.hpp"
 
+enum class State{
+    Homepage,
+    Game,
+    Quit
+};
+
 class App {
 public:
     App();
@@ -20,8 +26,10 @@ public:
     void cursor_position_callback(double xpos, double ypos);
     void size_callback(int width, int height);
 
+    State currentState;
+
 private:
-    void LoadImage(const std::string& imagePath); 
+    void LoadImage(const std::string& imagePath, int currentImage); 
     void Render();
     glm::vec2 rotateVec2(const glm::vec2& vec, const glm::vec2& center, const float& angle);
 
@@ -30,8 +38,10 @@ private:
     double _previousTime;
 
     bool pressed[349];
+    bool mousePressed = false;
+    glm::vec2 cursorPosition;
 
-    GLuint _textureId;
+    GLuint _textureId[10]; // TODO adapter taille du tableau
 
     float _imageAngle;
     float _viewSize;

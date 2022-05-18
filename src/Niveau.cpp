@@ -1,4 +1,5 @@
 #include "Niveau.hpp"
+#include "Quadtree.hpp"
 #include <iostream>
 #include "Window.hpp"
 #include "GLFW/glfw3.h"
@@ -21,7 +22,8 @@ players(players),
 currentPlayer(&(this->players[0])), 
 map(map), 
 gravity(g), 
-camera(0, 0) {}
+camera(0, 0),
+quadtree(new Quadtree(new Rectangle(WIDTH*2, HEIGHT*2, glm::vec3(0,0,0), glm::vec2(WIDTH, 0)))) {}
 
 Niveau::Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float g, std::vector<Rectangle> end){
     this->players = players;
@@ -33,6 +35,14 @@ Niveau::Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float
     this->camera = newC;
 
     this->endPlayers = end;
+
+    this->quadtree = new Quadtree(new Rectangle(WIDTH*2, HEIGHT*2, glm::vec3(0,0,0), glm::vec2(WIDTH, 0)));
+
+    for (size_t i = 0; i < this->map.size(); i++)
+    {
+        quadtree->insert(&(this->map[i]));
+    }
+    
 }
 
 void Niveau::drawPlayers(){
@@ -100,6 +110,7 @@ void Niveau::controls(bool * pressed, double time){
     }
 
     for(size_t i = 0; i<this->players.size(); i++){
+        // TODO souci de gravité sometimes
         this->players[i].applyGravity(this->gravity, time);
         this->players[i].setPosition(glm::vec2(this->players[i].getPosition().x, this->players[i].getPosition().y + this->players[i].velocity * time));
     }
@@ -123,24 +134,32 @@ void Niveau::key_callback(int key, int scancode, int action, int mods){
 void Niveau::collision(){
     std::vector<Rectangle*> all;
 
-    for (size_t m = 0; m < this->map.size() ; m++)
-    {
-        all.push_back(&(this->map[m]));
-    }
+    // // ajout de la map au vector qui servira aux collisions
+    // for (size_t m = 0; m < this->map.size() ; m++)
+    // {
+    //     all.push_back(&(this->map[m]));
+    // }
 
     for(size_t p = 1; p<this->players.size(); p++)
     {
+
+        std::vector<Rectangle*> temp;
+
+        all = this->quadtree->accessRightLeaf(this->players[p]);
+
         for (size_t a = 0; a < all.size(); a++)
         {
             this->players[p].collision(all[a]);
         }
     }
-        
+
+    all = this->quadtree->accessRightLeaf(*(this->currentPlayer));
+
+    // ajout des players qui ne sont pas courant   
     for (size_t j = 1; j < this->players.size(); j++)
     {
         all.push_back(&(this->players[j]));
     }
-
 
     for (size_t a = 0; a < all.size(); a++)
     {
