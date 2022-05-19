@@ -1,11 +1,11 @@
-#include "Homepage.hpp"
+#include "Rules.hpp"
 #include "GLFW/glfw3.h"
 
 State displayRulespage(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed){
 
         printf("x: %f, y: %f \n", cursorPosition.x, cursorPosition.y);
 
-        // glPushMatrix();
+        glPushMatrix();
 
         glScalef(0.873f, 0.873f, 0.873f);
     
@@ -20,12 +20,15 @@ State displayRulespage(GLuint* texture, glm::vec2 cursorPosition, bool mousePres
         
         //Rules bg
         glPushMatrix();
-        glScalef(260,151.5,0);
+        // glScalef(260,151.5,0);
+        glScalef(260,351.5,0);
         drawSquare();    
-        glPopMatrix();  
+        glPopMatrix(); 
+
+        glPopMatrix(); 
         
         //Bouton Return Menu
 
-        return State::Homepage;
+        return State::Rules;
 
 }

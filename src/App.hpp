@@ -10,6 +10,7 @@
 enum class State{
     Homepage,
     Game,
+    Rules,
     Quit
 };
 
@@ -41,10 +42,11 @@ private:
     bool mousePressed = false;
     glm::vec2 cursorPosition;
 
-    GLuint _textureId[10]; // TODO adapter taille du tableau
+    GLuint _textureId[10];
 
     float _imageAngle;
     float _viewSize;
 
     std::vector<Niveau *> levels;
+    int currentLevel = 0;
 };

@@ -3,13 +3,10 @@
 #define VARIABLES_H
 #include <glm/glm.hpp>
 #include "Formes.hpp"
+#include "Niveau.hpp"
 #include "Window.hpp"
 
 // TODO fonction init à appeler dans App.cpp
-
-// Exemple d'un rectangle
-    // ici sa couleur normalisée entre 0 et 1
-    glm::vec3 c(1, 1, 1);
 
     // ici sa position
     glm::vec2 p(0, 0);
@@ -17,32 +14,7 @@
     // ici son poids
     float w = 5.0f;
 
-    // ici on construit le rectangle
-    Rectangle test(0.1f, 0.1f, c, p, w);
-
-    glm::vec3 g(0, 1, 0);
-
     glm::vec2 pos(-0.5, 0);
-    Rectangle p2(0.1f, 0.2f, g, pos, w);
-
-
-// Création d'un sol
-    glm::vec3 blue(0, 0, 1);
-    glm::vec2 pSol(0, -HEIGHT);
-    Rectangle sol(WIDTH, HEIGHT/5, blue, pSol, 0);
-
-//Exemple d'un niveau
-    // ici on crée le vector de personnages du niveau 1
-    std::vector<Rectangle> pLvl1 = {test, p2};
-
-    // ici on crée le vector de formes du décor du niveau 1
-    std::vector<Rectangle> mLvlT = {sol};
-
-    // // ici on construit le niveau avec ses personnages et son décor et sa gravité
-    // Niveau niv1(pLvl1, mLvl1, 10);
-    
-    // ici on construit le niveau avec ses personnages et son décor sa gravité et sa camera
-    Niveau niv1(pLvl1, mLvlT, 0.1f);
 
 // Test Level 1 définitif
     // Map
@@ -90,5 +62,9 @@
 
     // Level
     Niveau lvl1(playersLvl1, mLvl1, 0.1, finalPosition);
+
+
+// Test Level 2 Définitif
+Niveau lvl2(playersLvl1, mLvl1, 0.15, finalPosition);
 
 #endif

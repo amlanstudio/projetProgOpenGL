@@ -38,7 +38,7 @@ public:
     void drawPlayers();
 
     // Permet de gérer les players
-    void controls(bool * pressed, double time);
+    void controls(bool * pressed, double time, int * currentLevel);
 
     // Permet de gérer les events
     void key_callback(int key, int scancode, int action, int mods);

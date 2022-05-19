@@ -71,7 +71,7 @@ void Niveau::drawMap(){
     }
 }
 
-void Niveau::controls(bool * pressed, double time){
+void Niveau::controls(bool * pressed, double time, int * currentLevel){
 
     this->camera.x = - this->currentPlayer->getPosition().x;
     this->camera.y = - this->currentPlayer->getPosition().y - 0.6f;
@@ -87,16 +87,22 @@ void Niveau::controls(bool * pressed, double time){
 
             this->endPlayers[i].setColor(this->currentPlayer->getColor());
 
-            this->map.push_back(this->endPlayers[i]);
+            // this->map.push_back(this->endPlayers[i]);
 
             if(this->players.size() != 1){
+                printf("Swap joueur \n");
                 this->players.erase(this->players.begin());
                 this->currentPlayer = &(this->players[0]);
+                this->currentPlayer->velocity = 0;
+
+                collision();
             } else {
                 this->currentPlayer = nullptr;
 
-                // TODO swap level
                 printf("Swap level");
+
+                *currentLevel += 1;
+                return;
             }
         }
     }
@@ -110,9 +116,11 @@ void Niveau::controls(bool * pressed, double time){
     }
 
     for(size_t i = 0; i<this->players.size(); i++){
-        // TODO souci de gravité sometimes
         this->players[i].applyGravity(this->gravity, time);
         this->players[i].setPosition(glm::vec2(this->players[i].getPosition().x, this->players[i].getPosition().y + this->players[i].velocity * time));
+
+        this->players[i].velocity = std::fmod(this->players[i].velocity, -30.f) ;
+        // printf("%d %f \n", i, this->players[i].velocity);
     }
 }
 
@@ -122,6 +130,8 @@ void Niveau::key_callback(int key, int scancode, int action, int mods){
         this->players.push_back(*(this->currentPlayer));
         this->players.erase(this->players.begin());
         this->currentPlayer = &(this->players[0]);
+
+        collision();
     }
 
     if(key == GLFW_KEY_R && action == GLFW_PRESS){
@@ -134,6 +144,7 @@ void Niveau::key_callback(int key, int scancode, int action, int mods){
 void Niveau::collision(){
     std::vector<Rectangle*> all;
 
+    // sans le quadtree
     // // ajout de la map au vector qui servira aux collisions
     // for (size_t m = 0; m < this->map.size() ; m++)
     // {
@@ -142,8 +153,6 @@ void Niveau::collision(){
 
     for(size_t p = 1; p<this->players.size(); p++)
     {
-
-        std::vector<Rectangle*> temp;
 
         all = this->quadtree->accessRightLeaf(this->players[p]);
 

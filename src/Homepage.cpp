@@ -30,164 +30,165 @@ State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
 
         glPushMatrix();
 
-        // glScalef(0.873f, 0.873f, 0.873f);
-        glScalef(0.015f, 0.015f, 0.015f);
-    
-        glEnable(GL_TEXTURE_2D);  // activation du texturing
-        glEnable(GL_BLEND);  // activation la transparence
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);  // gere la transparence
-
-        // ----- MON DESSIN -----
-
-        glBindTexture(GL_TEXTURE_2D, texture[0]); //application de ma texture 1
-        glColor3f(1.,1.,1.);
+                // glScalef(0.873f, 0.873f, 0.873f);
+                glScalef(0.015f, 0.015f, 0.015f);
         
-        //Deco bg
-        glPushMatrix();
-        glScalef(260,151.5,0);
-        drawSquare();    
-        glPopMatrix();  
-        
-        //Bouton start
+                glEnable(GL_TEXTURE_2D);  // activation du texturing
+                glEnable(GL_BLEND);  // activation la transparence
 
-        if(
+                // action cette commande 
+                glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);  // gere la transparence
+
+                // ----- MON DESSIN -----
+
+                glBindTexture(GL_TEXTURE_2D, texture[0]); //application de ma texture 1
+                glColor3f(1.,1.,1.);
+                
+                //Deco bg
+                glPushMatrix();
+                        glScalef(260,151.5,0);
+                        drawSquare();    
+                glPopMatrix();  
+                
+                //Bouton start
+
+                if(
+                        //hover
+                        cursorPosition.x>=520
+                        && cursorPosition.x<=745
+                        && cursorPosition.y<=490
+                        &&cursorPosition.y>=268
+                ){
+                        glBindTexture(GL_TEXTURE_2D, texture[5]); //application de ma texture rules avant hover 
+
+                        glPushMatrix();
+                                glTranslatef(0,-4,0);
+                                glScalef(52.575,46.41375,0);
+                                drawSquare();    
+                        glPopMatrix();
+                
+
+                        if(mousePressed){
+                                return State::Game;
+                        }
+                }
+                else{
+                        glBindTexture(GL_TEXTURE_2D, texture[1]); //application de ma texture start avant hover 
+
+                        glPushMatrix();
+                                glTranslatef(0,-4,0);
+                                glScalef(52.575,46.41375,0);
+                                drawSquare();    
+                        glPopMatrix();
+                }
+
+                
+
+                //Bouton Credit
+
+                if(
+
+                // hover
+                        cursorPosition.x>=80
+                        && cursorPosition.x<=340
+                        && cursorPosition.y<= 680
+                        &&cursorPosition.y>= 594
+                ){
+                        glBindTexture(GL_TEXTURE_2D, texture[6]); //application de ma texture rules avant hover 
+
+                        glPushMatrix();
+                                glTranslatef(-70,-45,0);
+                                glScalef(50.25,19.625,0);
+                                drawSquare();    
+                        glPopMatrix(); 
+                        
+                        //if(mousePressed){
+                        //return State:: ... ; //TODO renvoyer vers page de credits
+                        // }
+                }
+                else{
+                        glBindTexture(GL_TEXTURE_2D, texture[2]); //application de ma texture credit avant hover 
+
+                        glPushMatrix();
+                                glTranslatef(-70,-45,0);
+                                glScalef(50.25,19.625,0);
+                                drawSquare();    
+                        glPopMatrix(); 
+                }
+                
+
+                //Bouton Rules
+
+                if(
+
                 //hover
-                cursorPosition.x>=520
-                && cursorPosition.x<=745
-                && cursorPosition.y<=490
-                &&cursorPosition.y>=268
-        ){
-                glBindTexture(GL_TEXTURE_2D, texture[5]); //application de ma texture rules avant hover 
+                        cursorPosition.x>=510
+                        && cursorPosition.x<=770
+                        && cursorPosition.y<= 680
+                        &&cursorPosition.y>= 594
+                ){
+                        glBindTexture(GL_TEXTURE_2D, texture[7]); //application de ma texture rules avant hover 
+
+                        glPushMatrix();
+                                glTranslatef(0,-45,0);
+                                glScalef(50.25,19.625,0);
+                                drawSquare();    
+                        glPopMatrix();
+                
+                        if(mousePressed){
+                        return State::Rules ; //TODO renvoyer vers page de rules
+                        }
+
+                }     
+                else{
+                        glBindTexture(GL_TEXTURE_2D, texture[3]); //application de ma texture rules avant hover 
+
+                        glPushMatrix();
+                                glTranslatef(0,-45,0);
+                                glScalef(50.25,19.625,0);
+                                drawSquare();    
+                        glPopMatrix();
+                }  
+
+                //Bouton Quit
+
+                if(
+
+                //hover
+                        cursorPosition.x>=940 
+                        && cursorPosition.x<=1202 
+                        && cursorPosition.y<= 680
+                        &&cursorPosition.y>= 594
+                        ){
+                glBindTexture(GL_TEXTURE_2D, texture[8]); //application de ma texture rules après hover 
 
                 glPushMatrix();
-                        glTranslatef(0,-4,0);
-                        glScalef(52.575,46.41375,0);
+                        glTranslatef(70,-45,0);
+                        glScalef(50.25,19.625,0);
                         drawSquare();    
-                glPopMatrix();
-        
+                glPopMatrix();  
+
+                //clic
 
                 if(mousePressed){
-                        printf("oui");
-                        return State::Game; //TODO renvoyer vers page de jeu
+                        return State::Quit;
                 }
-        }
-        else{
-                glBindTexture(GL_TEXTURE_2D, texture[1]); //application de ma texture start avant hover 
+
+                }
+                else{
+                        // printf("x: %f, y: %f \n", cursorPosition.x, cursorPosition.y);
+                glBindTexture(GL_TEXTURE_2D, texture[4]); //application de ma texture rules avant hover 
 
                 glPushMatrix();
-                        glTranslatef(0,-4,0);
-                        glScalef(52.575,46.41375,0);
-                        drawSquare();    
-                glPopMatrix();
-        }
-
-         
-
-        //Bouton Credit
-
-        if(
-
-           // hover
-                cursorPosition.x>=80
-                && cursorPosition.x<=340
-                && cursorPosition.y<= 680
-                &&cursorPosition.y>= 594
-        ){
-                glBindTexture(GL_TEXTURE_2D, texture[6]); //application de ma texture rules avant hover 
-
-                glPushMatrix();
-                        glTranslatef(-70,-45,0);
-                        glScalef(50.25,19.625,0);
-                        drawSquare();    
-                glPopMatrix(); 
-                
-                //if(mousePressed){
-                //return State:: ... ; //TODO renvoyer vers page de credits
-                // }
-        }
-        else{
-                glBindTexture(GL_TEXTURE_2D, texture[2]); //application de ma texture credit avant hover 
-
-                glPushMatrix();
-                        glTranslatef(-70,-45,0);
-                        glScalef(50.25,19.625,0);
-                        drawSquare();    
-                glPopMatrix(); 
-        }
-         
-
-        //Bouton Rules
-
-        if(
-
-            //hover
-                cursorPosition.x>=510
-                && cursorPosition.x<=770
-                && cursorPosition.y<= 680
-                &&cursorPosition.y>= 594
-        ){
-                glBindTexture(GL_TEXTURE_2D, texture[7]); //application de ma texture rules avant hover 
-
-                glPushMatrix();
-                        glTranslatef(0,-45,0);
+                        glTranslatef(70,-45,0);
                         glScalef(50.25,19.625,0);
                         drawSquare();    
                 glPopMatrix();
-        
-                //if(mousePressed){
-                //return State:: ... ; //TODO renvoyer vers page de rules
-                // }
 
-        }     
-        else{
-                glBindTexture(GL_TEXTURE_2D, texture[3]); //application de ma texture rules avant hover 
+                }
 
-                glPushMatrix();
-                        glTranslatef(0,-45,0);
-                        glScalef(50.25,19.625,0);
-                        drawSquare();    
-                glPopMatrix();
-        }  
-
-        //Bouton Quit
-
-        if(
-
-            //hover
-                cursorPosition.x>=940 
-                && cursorPosition.x<=1202 
-                && cursorPosition.y<= 680
-                &&cursorPosition.y>= 594
-                ){
-            glBindTexture(GL_TEXTURE_2D, texture[8]); //application de ma texture rules après hover 
-
-            glPushMatrix();
-                glTranslatef(70,-45,0);
-                glScalef(50.25,19.625,0);
-                drawSquare();    
-            glPopMatrix();  
-
-            //clic
-
-            if(mousePressed){
-                return State::Quit;
-            }
-
-        }
-        else{
-                // printf("x: %f, y: %f \n", cursorPosition.x, cursorPosition.y);
-            glBindTexture(GL_TEXTURE_2D, texture[4]); //application de ma texture rules avant hover 
-
-            glPushMatrix();
-                glTranslatef(70,-45,0);
-                glScalef(50.25,19.625,0);
-                drawSquare();    
-            glPopMatrix();
-
-        }
-
-
-        glDisable(GL_TEXTURE_2D); //desactivation du texturing 
+                // glBindTexture(GL_TEXTURE_2D, 0);
+                glDisable(GL_TEXTURE_2D); //desactivation du texturing 
 
 
         glPopMatrix();

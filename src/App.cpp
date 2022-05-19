@@ -15,11 +15,12 @@
 #include "Niveau.hpp"
 #include "Variables.hpp"
 #include "Homepage.hpp"
+#include "Rules.hpp"
 
 App::App(): App(2.0f) {
 }
 
-App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(viewSize), currentState(State::Game) {
+App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(viewSize), currentState(State::Homepage) {
 
     const int nbImages = 10;
 
@@ -34,7 +35,7 @@ App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(view
         std::string(ROOT_DIR) + "res/buttons/hovcredits_btn.png",
         std::string(ROOT_DIR) + "res/buttons/hovrules_btn.png",
         std::string(ROOT_DIR) + "res/buttons/hovquit_btn.png",
-        std::string(ROOT_DIR) + "res/buttons/bg_rules.png"
+        std::string(ROOT_DIR) + "res/images/bg_rules.png"
 
 
         };
@@ -52,7 +53,7 @@ App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(view
         this->pressed[i] = false;
     }
 
-    this->levels = {&lvl1};
+    this->levels = {&lvl1, &lvl2};
 }
 
 void App::LoadImage(const std::string& imagePath, int currentImage) {
@@ -89,12 +90,19 @@ void App::Update() {
     _previousTime = currentTime;
     
     // update imageAngle (use elapsedTime to update without being dependent on the frame rate)
-    _imageAngle = fmod(_imageAngle + 10.0f * (float)elapsedTime, 360.0f);
+    // _imageAngle = fmod(_imageAngle + 10.0f * (float)elapsedTime, 360.0f);
 
-    if(currentState == State::Game){       
-        lvl1.controls(this->pressed, elapsedTime);
-    
-        lvl1.collision();
+    if(currentState == State::Game){
+        if(currentLevel < this->levels.size()){
+            this->levels[currentLevel]->controls(this->pressed, elapsedTime, &currentLevel);
+
+            if(currentLevel < this->levels.size()){
+                this->levels[currentLevel]->collision();
+            }
+        } else {
+            // TODO que faire quand tous les niveaux sont faits
+            currentState = State::Homepage;
+        }
     }
     
     Render();
@@ -103,92 +111,42 @@ void App::Update() {
 void App::Render() {
     // Couleur du fond sans rien (ici gris)
     glClearColor((36.f/255.f), (36.f/255.f),(36.f/255.f), 1.f);
-    // glClearColor(1.f, 0.f,0.f, 1.f);
+
     glClear(GL_COLOR_BUFFER_BIT);
     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     
     glMatrixMode(GL_MODELVIEW);
 
-    // glPushMatrix();
-
-    // glScalef(0.87f, 0.87f, 0.87f);
-
-    // TODO Translation permettant de faire une caméra
-    // glTranslatef(this->levels[0]->camera.x, this->levels[0]->camera.y, 0);
-
-    
-
-    // Exemple d'un rectangle
-        // ici on trace le rectangle
-        // test.draw();
-
     //Exemple d'un niveau
-        // ici on pense bien à dessiner tous les personnages
         if(currentState == State::Game){
-            // TODO le jeu s'affiche pas depuis l'accueil, pourquoi
-            glPushMatrix();
-            // glScalef(1.5f, 1.5f, 1.5f);
-            // printf("Game");
-            glTranslatef(this->levels[0]->camera.x, this->levels[0]->camera.y, 0);
-            lvl1.drawMap();
-            lvl1.drawPlayers();
-            glPopMatrix();
+            if(currentLevel < this->levels.size()){
+                // Permet d'afficher le jeu sans problème (s'assure qu'il n'y ait plus de texture)
+                glDisable(GL_TEXTURE_2D);
+                glLoadIdentity();
 
-            // glPushMatrix();
-            // glColor3f(1.0f, 0.0f, 0.0f);
-            // glBegin(GL_QUADS);
-            //     glVertex2f(-0.5f, -0.5f);
-            //     glVertex2f(0.5f, -0.5f);
-            //     glVertex2f(0.5f, 0.5f);
-            //     glVertex2f(-0.5f, 0.5f);
-            // glEnd();
-            // glPopMatrix();
+                // TODO cube with level number
 
-            // if(mousePressed){
-            //     printf("Go");
-            //     currentState = State::Homepage;
-            // }
+                glPushMatrix();
+                glTranslatef(this->levels[currentLevel]->camera.x, this->levels[currentLevel]->camera.y, 0);
+                this->levels[currentLevel]->drawMap();
+                this->levels[currentLevel]->drawPlayers();
+                glPopMatrix();
+            } else {
+                currentState = State::Homepage;
+            }
         }
 
 
 
-    // Test homepage
+    // Homepage
     if(currentState == State::Homepage){
-        // printf("Homepage");
         currentState = displayHomepage(_textureId, cursorPosition, mousePressed);
     }
 
-    // // Exemple Enguerrand
-    //     // render exemple quad
-    //     glColor3f(1.0f, 0.0f, 0.0f);
-    //     glBegin(GL_QUADS);
-    //         glVertex2f(-0.5f, -0.5f);
-    //         glVertex2f(0.5f, -0.5f);
-    //         glVertex2f(0.5f, 0.5f);
-    //         glVertex2f(-0.5f, 0.5f);
-    //     glEnd();
-
-    //     const float imageAngleRad = glm::radians(_imageAngle);
-    //     //Render the texture on the screen
-    //     glEnable(GL_TEXTURE_2D);
-
-    //     glBindTexture(GL_TEXTURE_2D, _textureId[1]);
-    //     glColor3f(1.0f, 1.0f, 1.0f);
-    //     glBegin(GL_QUADS);
-    //         glm::vec2 upperLeft = glm::rotate(glm::vec2(-0.3f, -0.3f), imageAngleRad);
-    //         glTexCoord2d(0,0); glVertex2f(upperLeft.x, upperLeft.y);
-
-    //         glm::vec2 upperRight = glm::rotate(glm::vec2(0.3f, -0.3f), imageAngleRad);
-    //         glTexCoord2d(1,0); glVertex2f(upperRight.x, upperRight.y);
-
-    //         glm::vec2 bottomRight =  glm::rotate(glm::vec2(0.3f, 0.3f), imageAngleRad);
-    //         glTexCoord2d(1,1); glVertex2f(bottomRight.x, bottomRight.y);
-
-    //         glm::vec2 bottomLeft =  glm::rotate(glm::vec2(-0.3f, 0.3f), imageAngleRad);
-    //         glTexCoord2d(0,1); glVertex2f(bottomLeft.x, bottomLeft.y);
-    //     glEnd();
-    //     glDisable(GL_TEXTURE_2D);
-    // glPopMatrix();
+    // Rules
+    if(currentState == State::Rules){
+        currentState = displayRulespage(_textureId, cursorPosition, mousePressed);
+    }
 }
 
 void App::key_callback(int key, int scancode, int action, int mods) {
@@ -199,8 +157,10 @@ void App::key_callback(int key, int scancode, int action, int mods) {
     else if(action == GLFW_RELEASE)
         this->pressed[key] = false;
 
+    if(currentLevel < this->levels.size()){
     // function qui permet d'envoyer les keycode au niveau
-    lvl1.key_callback(key, scancode, action, mods);
+        this->levels[currentLevel]->key_callback(key, scancode, action, mods);
+    }
 }
 
 void App::mouse_button_callback(int button, int action, int mods) {
