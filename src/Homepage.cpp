@@ -73,7 +73,7 @@ State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                         }
                 }
                 else{
-                        glBindTexture(GL_TEXTURE_2D, texture[1]); //application de ma texture start avant hover 
+                        glBindTexture(GL_TEXTURE_2D, texture[1]); //application de ma texture start apres hover 
 
                         glPushMatrix();
                                 glTranslatef(0,-4,0);
@@ -102,9 +102,9 @@ State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                                 drawSquare();    
                         glPopMatrix(); 
                         
-                        //if(mousePressed){
-                        //return State:: ... ; //TODO renvoyer vers page de credits
-                        // }
+                        if(mousePressed){
+                        return State::Credits ; 
+                        }
                 }
                 else{
                         glBindTexture(GL_TEXTURE_2D, texture[2]); //application de ma texture credit avant hover 
@@ -136,7 +136,7 @@ State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                         glPopMatrix();
                 
                         if(mousePressed){
-                        return State::Rules ; //TODO renvoyer vers page de rules
+                        return State::Rules ; 
                         }
 
                 }     

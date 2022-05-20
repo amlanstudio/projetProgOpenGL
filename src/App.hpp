@@ -11,6 +11,9 @@ enum class State{
     Homepage,
     Game,
     Rules,
+    Credits,
+    GameOver,
+    WellDone,
     Quit
 };
 
@@ -40,9 +43,10 @@ private:
 
     bool pressed[349];
     bool mousePressed = false;
+    int scroll = 0;
     glm::vec2 cursorPosition;
 
-    GLuint _textureId[10];
+    GLuint _textureId[19];
 
     float _imageAngle;
     float _viewSize;

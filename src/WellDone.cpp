@@ -1,4 +1,4 @@
-#include "GameOver.hpp"
+#include "WellDone.hpp"
 
 // #include <iostream>
 // #include "Window.hpp"
@@ -7,7 +7,7 @@
 
 // ------ CREATION DE MES FONCTIONS ET LISTES ------ 
 
-State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed){
+State displayWellDone(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed){
 
         // printf("x: %f, y: %f \n", cursorPosition.x, cursorPosition.y);
 
@@ -24,7 +24,7 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
 
                 // ----- MON DESSIN -----
 
-                glBindTexture(GL_TEXTURE_2D, texture[16]); //application de ma texture 16 "game over"
+                glBindTexture(GL_TEXTURE_2D, texture[17]); //application de ma texture 17 "well done"
                 glColor3f(1.,1.,1.);
                 
                 //Deco bg
@@ -37,21 +37,22 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
 
                 if(
                         //hover
-                        cursorPosition.x>=520
-                        && cursorPosition.x<=745
-                        && cursorPosition.y<=490
-                        &&cursorPosition.y>=268
+                        cursorPosition.x>=365
+                        && cursorPosition.x<=585
+                        && cursorPosition.y<=635
+                        &&cursorPosition.y>=570
                 ){
                         glBindTexture(GL_TEXTURE_2D, texture[15]); //application de ma texture "yes" on hover 
 
                         glPushMatrix();
-                                 glTranslatef(70,-45,0);
+                                 glTranslatef(-30,-45,0);
                                  glScalef(50.25,19.625,0);
                                  drawSquare();   
                         glPopMatrix();
                 
 
                         if(mousePressed){
+                                // TODO fix avec init level
                                 return State::Game;
                         }
                 }
@@ -59,7 +60,7 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                         glBindTexture(GL_TEXTURE_2D, texture[14]); //application de ma texture "yes" out hover 
 
                         glPushMatrix();
-                                glTranslatef(70,-45,0);
+                                glTranslatef(-30,-45,0);
                                 glScalef(50.25,19.625,0);
                                 drawSquare();     
                         glPopMatrix();
@@ -72,15 +73,15 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 if(
 
                 //hover
-                        cursorPosition.x>=940 
-                        && cursorPosition.x<=1202 
-                        && cursorPosition.y<= 680
-                        &&cursorPosition.y>= 594
+                        cursorPosition.x>=690
+                        && cursorPosition.x<=910
+                        && cursorPosition.y<=635
+                        &&cursorPosition.y>=570
                         ){
                 glBindTexture(GL_TEXTURE_2D, texture[13]); //application de ma texture "no" on hover 
 
                 glPushMatrix();
-                        glTranslatef(70,-45,0);
+                        glTranslatef(30,-45,0);
                         glScalef(50.25,19.625,0);
                         drawSquare();    
                 glPopMatrix();  
@@ -88,7 +89,7 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 //clic
 
                 if(mousePressed){
-                        return State::Quit;
+                        return State::Homepage;
                 }
 
                 }
@@ -97,7 +98,7 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 glBindTexture(GL_TEXTURE_2D, texture[11]); //application de ma texture "no" out hover 
 
                 glPushMatrix();
-                        glTranslatef(70,-45,0);
+                        glTranslatef(30,-45,0);
                         glScalef(50.25,19.625,0);
                         drawSquare();    
                 glPopMatrix();
@@ -110,5 +111,5 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
 
         glPopMatrix();
         
-        return State::GameOver;
+        return State::WellDone;
 }

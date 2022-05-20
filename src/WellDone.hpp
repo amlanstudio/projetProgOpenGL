@@ -5,4 +5,5 @@
 #include "App.hpp"
 #include "Homepage.hpp"
 
-State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed);
+
+State displayWellDone(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed);

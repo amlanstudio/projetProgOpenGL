@@ -16,26 +16,43 @@
 #include "Variables.hpp"
 #include "Homepage.hpp"
 #include "Rules.hpp"
+#include "GameOver.hpp"
+#include "WellDone.hpp"
+#include "Credits.hpp"
+
+
+int translateY = -95;
 
 App::App(): App(2.0f) {
 }
 
 App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(viewSize), currentState(State::Homepage) {
 
-    const int nbImages = 10;
+    const int nbImages = 19;
 
     // tips found here for absolut ressources path: https://shot511.github.io/2018-05-29-how-to-setup-opengl-project-with-cmake/
     const std::string imagePath[nbImages] = {
-        std::string(ROOT_DIR) + "res/images/home_fond.png",
-        std::string(ROOT_DIR) + "res/buttons/befstart_btn.png",
-        std::string(ROOT_DIR) + "res/buttons/befcredits_btn.png",
-        std::string(ROOT_DIR) + "res/buttons/befrules_btn.png",
-        std::string(ROOT_DIR) + "res/buttons/befquit_btn.png",
-        std::string(ROOT_DIR) + "res/buttons/btn_hovstart.png",
-        std::string(ROOT_DIR) + "res/buttons/hovcredits_btn.png",
-        std::string(ROOT_DIR) + "res/buttons/hovrules_btn.png",
-        std::string(ROOT_DIR) + "res/buttons/hovquit_btn.png",
-        std::string(ROOT_DIR) + "res/images/bg_rules.png"
+        std::string(ROOT_DIR) + "res/images/home_fond.png", //0
+        std::string(ROOT_DIR) + "res/buttons/befstart_btn.png", //1
+        std::string(ROOT_DIR) + "res/buttons/befcredits_btn.png", //2
+        std::string(ROOT_DIR) + "res/buttons/befrules_btn.png", //3
+        std::string(ROOT_DIR) + "res/buttons/befquit_btn.png", //4
+        std::string(ROOT_DIR) + "res/buttons/btn_hovstart.png", //5
+        std::string(ROOT_DIR) + "res/buttons/hovcredits_btn.png", //6
+        std::string(ROOT_DIR) + "res/buttons/hovrules_btn.png",//7
+        std::string(ROOT_DIR) + "res/buttons/hovquit_btn.png",//8
+        std::string(ROOT_DIR) + "res/images/bg_rules.png",//9
+        std::string(ROOT_DIR) + "res/buttons/befbtnback.png",//10
+        std::string(ROOT_DIR) + "res/buttons/befbtnno.png",//11
+        std::string(ROOT_DIR) + "res/buttons/hovbtnback.png",//12
+        std::string(ROOT_DIR) + "res/buttons/hovbtnno.png",//13
+        std::string(ROOT_DIR) + "res/buttons/befbtnyes.png",//14
+        std::string(ROOT_DIR) + "res/buttons/hovbtnyes.png",//15
+        std::string(ROOT_DIR) + "res/images/gameover.png",//16
+        std::string(ROOT_DIR) + "res/images/welldone.png",//17
+        std::string(ROOT_DIR) + "res/images/credits.png"//18
+
+
 
 
         };
@@ -101,7 +118,7 @@ void App::Update() {
             }
         } else {
             // TODO que faire quand tous les niveaux sont faits
-            currentState = State::Homepage;
+            currentState = State::WellDone;
         }
     }
     
@@ -118,6 +135,7 @@ void App::Render() {
     glMatrixMode(GL_MODELVIEW);
 
     //Exemple d'un niveau
+    // TODO init level pour permettre restart
         if(currentState == State::Game){
             if(currentLevel < this->levels.size()){
                 // Permet d'afficher le jeu sans problème (s'assure qu'il n'y ait plus de texture)
@@ -132,20 +150,38 @@ void App::Render() {
                 this->levels[currentLevel]->drawPlayers();
                 glPopMatrix();
             } else {
-                currentState = State::Homepage;
+                currentState = State::WellDone;
             }
         }
 
-
-
     // Homepage
     if(currentState == State::Homepage){
+        // printf("Homepage");
+        glLoadIdentity();
         currentState = displayHomepage(_textureId, cursorPosition, mousePressed);
     }
 
     // Rules
     if(currentState == State::Rules){
-        currentState = displayRulespage(_textureId, cursorPosition, mousePressed);
+        // printf("Rules");
+        currentState = displayRulespage(_textureId, cursorPosition, mousePressed, translateY);
+        scroll = 0;
+    }
+
+    // GameOver
+    if(currentState == State::GameOver){
+        currentState = displayGameOver(_textureId, cursorPosition,mousePressed);
+    }
+
+     // WellDone
+    if(currentState == State::WellDone){
+        currentState = displayWellDone(_textureId, cursorPosition,mousePressed);
+    }
+
+    // WellDone
+    if(currentState == State::Credits){
+        // printf("Credits");
+        currentState = displayCredits(_textureId, cursorPosition,mousePressed);
     }
 }
 
@@ -176,7 +212,17 @@ void App::mouse_button_callback(int button, int action, int mods) {
     
 }
 
-void App::scroll_callback(double /*xoffset*/, double /*yoffset*/) {
+void App::scroll_callback(double xoffset, double yoffset) {
+    // printf("scroll : %f \n", yoffset);
+
+    this->scroll = yoffset;
+
+    if(scroll == 1){
+        translateY += 20;
+    }
+    if(scroll == -1){
+        translateY -= 20;
+    }
 }
 
 void App::cursor_position_callback(double xpos, double ypos) {
