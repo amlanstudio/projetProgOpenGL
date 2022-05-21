@@ -3,7 +3,7 @@
 
 State displayCredits(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed){
 
-        printf("x: %f, y: %f \n", cursorPosition.x, cursorPosition.y);
+        // printf("x: %f, y: %f \n", cursorPosition.x, cursorPosition.y);
 
         glPushMatrix();
 
@@ -46,7 +46,6 @@ State displayCredits(GLuint* texture, glm::vec2 cursorPosition, bool mousePresse
                 
 
                         if(mousePressed){
-                                // TODO fix back to homepage
                             return State::Homepage;
                         }
                 }

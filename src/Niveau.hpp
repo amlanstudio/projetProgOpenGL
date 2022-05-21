@@ -22,6 +22,11 @@ public:
     // Camera (il s'agit en fait d'un vecteur 2 coordonnees vu qu'on a besoin du x et du y)
     glm::vec2 camera;
 
+    // Constructeur par défaut
+    Niveau();
+
+    void initNiveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float gravity, std::vector<Rectangle> finalPositionPlayers);
+
     // Constructeur avec juste des personnages
     Niveau(std::vector<Rectangle> players);
 

@@ -52,7 +52,7 @@ State displayWellDone(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 
 
                         if(mousePressed){
-                                // TODO fix avec init level
+                                glPopMatrix();
                                 return State::Game;
                         }
                 }

@@ -6,8 +6,6 @@
 #include "Niveau.hpp"
 #include "Window.hpp"
 
-// TODO fonction init à appeler dans App.cpp
-
     // ici sa position
     glm::vec2 p(0, 0);
 
@@ -25,46 +23,41 @@
     glm::vec3 rougeBlur(0.5, 0, 0);
 
     glm::vec2 pSol1(WIDTH, -HEIGHT);
-    Rectangle solLvl1(WIDTH*1.8, HEIGHT/5, noir, pSol1);
+    Rectangle solLvl1(WIDTH*1.8f, HEIGHT/5, noir, pSol1);
 
     glm::vec2 pPlafond1(WIDTH, HEIGHT);
-    Rectangle plafondLvl1(WIDTH*1.8, HEIGHT/5, noir, pPlafond1);
+    Rectangle plafondLvl1(WIDTH*1.8f, HEIGHT/5, noir, pPlafond1);
 
     glm::vec2 pMurG(-WIDTH*1.2, 0);
-    Rectangle murGLvl1(WIDTH*0.5, HEIGHT*1.5, noir, pMurG);
+    Rectangle murGLvl1(WIDTH*0.5f, HEIGHT*1.5f, noir, pMurG);
     
     glm::vec2 pMurD(WIDTH*3.2, 0);
-    Rectangle murDLvl1(WIDTH*0.5, HEIGHT*1.5, noir, pMurD);
+    Rectangle murDLvl1(WIDTH*0.5f, HEIGHT*1.5f, noir, pMurD);
 
-    glm::vec2 pObs1(WIDTH/2, -HEIGHT+0.3);
-    Rectangle obsLvl1(0.1, 0.11, noir, pObs1);
+    glm::vec2 pObs1(WIDTH/2.f, -HEIGHT+0.3f);
+    Rectangle obsLvl1(0.1f, 0.11f, noir, pObs1);
 
     glm::vec2 pObs2(WIDTH + (WIDTH/2), -HEIGHT+0.3);
-    Rectangle obs2Lvl1(0.1, 0.11, noir, pObs2);
+    Rectangle obs2Lvl1(0.1f, 0.11f, noir, pObs2);
 
     std::vector<Rectangle> mLvl1 ={solLvl1, plafondLvl1, murGLvl1, murDLvl1, obsLvl1, obs2Lvl1};
 
     // Players
     // TODO à ajuster
-    Rectangle playerLvl1(0.1, 0.1, jaune, p, w);
+    Rectangle playerLvl1(0.1f, 0.1f, jaune, p, w);
     Rectangle player2Lvl1(0.1f, 0.2f, rouge, pos, w, Power::Rotate);
 
     std::vector<Rectangle> playersLvl1 = {playerLvl1, player2Lvl1};
 
     // Final Position Players
     glm::vec2 pEnd(WIDTH + (3*WIDTH/4), -HEIGHT+0.3);
-    Rectangle endPlayerLvl1(0.1, 0.1, jauneBlur, pEnd);
+    Rectangle endPlayerLvl1(0.1f, 0.1f, jauneBlur, pEnd);
 
-    glm::vec2 posEnd(WIDTH + (3*WIDTH/4) + 0.25, -HEIGHT+0.4);
-    Rectangle endPlayer2Lvl1(0.1, 0.2, rougeBlur, posEnd);
+    glm::vec2 posEnd((WIDTH + (3*WIDTH/4) + 0.25), (-HEIGHT+0.4));
+    Rectangle endPlayer2Lvl1(0.1f, 0.2f, rougeBlur, posEnd);
 
     std::vector<Rectangle> finalPosition = {endPlayerLvl1, endPlayer2Lvl1};
 
-    // Level
-    Niveau lvl1(playersLvl1, mLvl1, 0.1, finalPosition);
-
-
-// Test Level 2 Définitif
-Niveau lvl2(playersLvl1, mLvl1, 0.15, finalPosition);
-
+// Levels    
+    Niveau level1;
 #endif

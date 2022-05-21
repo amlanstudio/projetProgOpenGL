@@ -23,6 +23,12 @@
 
 int translateY = -95;
 
+void initLevel(Niveau * level, std::vector<Rectangle> players, std::vector<Rectangle> map, float gravity, std::vector<Rectangle> finalPositionPlayers){
+    // Initialisation du niveau
+    // Level
+    level->initNiveau(players, map, gravity, finalPositionPlayers);
+};
+
 App::App(): App(2.0f) {
 }
 
@@ -51,10 +57,6 @@ App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(view
         std::string(ROOT_DIR) + "res/images/gameover.png",//16
         std::string(ROOT_DIR) + "res/images/welldone.png",//17
         std::string(ROOT_DIR) + "res/images/credits.png"//18
-
-
-
-
         };
 
     glGenTextures(nbImages, _textureId);
@@ -70,7 +72,8 @@ App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(view
         this->pressed[i] = false;
     }
 
-    this->levels = {&lvl1, &lvl2};
+    initLevel(&level1, playersLvl1, mLvl1, 0.1f, finalPosition);
+    this->levels = {&level1};
 }
 
 void App::LoadImage(const std::string& imagePath, int currentImage) {
@@ -117,8 +120,9 @@ void App::Update() {
                 this->levels[currentLevel]->collision();
             }
         } else {
-            // TODO que faire quand tous les niveaux sont faits
+            // Quand tous les niveaux sont faits
             currentState = State::WellDone;
+            mousePressed = false;
         }
     }
     
@@ -135,7 +139,6 @@ void App::Render() {
     glMatrixMode(GL_MODELVIEW);
 
     //Exemple d'un niveau
-    // TODO init level pour permettre restart
         if(currentState == State::Game){
             if(currentLevel < this->levels.size()){
                 // Permet d'afficher le jeu sans problème (s'assure qu'il n'y ait plus de texture)
@@ -151,6 +154,10 @@ void App::Render() {
                 glPopMatrix();
             } else {
                 currentState = State::WellDone;
+                this->mousePressed = false;
+                initLevel(&level1, playersLvl1, mLvl1, 0.1f, finalPosition);
+                this->levels = {&level1};
+                currentLevel = 0;
             }
         }
 
@@ -159,6 +166,7 @@ void App::Render() {
         // printf("Homepage");
         glLoadIdentity();
         currentState = displayHomepage(_textureId, cursorPosition, mousePressed);
+        this->mousePressed = false;
     }
 
     // Rules
@@ -166,22 +174,26 @@ void App::Render() {
         // printf("Rules");
         currentState = displayRulespage(_textureId, cursorPosition, mousePressed, translateY);
         scroll = 0;
+        this->mousePressed = false;
     }
 
     // GameOver
     if(currentState == State::GameOver){
         currentState = displayGameOver(_textureId, cursorPosition,mousePressed);
+        this->mousePressed = false;
     }
 
      // WellDone
     if(currentState == State::WellDone){
         currentState = displayWellDone(_textureId, cursorPosition,mousePressed);
+        this->mousePressed = false;
     }
 
     // WellDone
     if(currentState == State::Credits){
         // printf("Credits");
         currentState = displayCredits(_textureId, cursorPosition,mousePressed);
+        this->mousePressed = false;
     }
 }
 
@@ -215,7 +227,7 @@ void App::mouse_button_callback(int button, int action, int mods) {
 void App::scroll_callback(double xoffset, double yoffset) {
     // printf("scroll : %f \n", yoffset);
 
-    this->scroll = yoffset;
+    this->scroll = (int) yoffset;
 
     if(scroll == 1){
         translateY += 20;
@@ -228,8 +240,8 @@ void App::scroll_callback(double xoffset, double yoffset) {
 void App::cursor_position_callback(double xpos, double ypos) {
     //gestion hover
     
-    this->cursorPosition.x = xpos;
-    this->cursorPosition.y = ypos;
+    this->cursorPosition.x = (float) xpos;
+    this->cursorPosition.y = (float) ypos;
 }
 
 void App::size_callback(int width, int height) {

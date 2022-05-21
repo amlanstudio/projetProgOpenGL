@@ -54,3 +54,5 @@ private:
     std::vector<Niveau *> levels;
     int currentLevel = 0;
 };
+
+void initLevel(Niveau * level, std::vector<Rectangle> players, std::vector<Rectangle> map, float gravity, std::vector<Rectangle> finalPositionPlayers);

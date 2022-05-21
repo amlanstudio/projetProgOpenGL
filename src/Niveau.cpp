@@ -4,6 +4,21 @@
 #include "Window.hpp"
 #include "GLFW/glfw3.h"
 
+Niveau::Niveau(){
+    std::vector<Rectangle> vide;
+    this->players = vide;
+
+    this->currentPlayer = nullptr;
+    this->map = vide;
+    this->gravity = 0;
+
+    this->camera = glm::vec2(0, 0);
+
+    this->endPlayers = vide;
+
+    this->quadtree = nullptr;
+}
+
 Niveau::Niveau(std::vector<Rectangle> players){
     this->players = players;
     this->currentPlayer = &(this->players[0]);
@@ -24,6 +39,25 @@ map(map),
 gravity(g), 
 camera(0, 0),
 quadtree(new Quadtree(new Rectangle(WIDTH*2, HEIGHT*2, glm::vec3(0,0,0), glm::vec2(WIDTH, 0)))) {}
+
+void Niveau::initNiveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float gravity, std::vector<Rectangle> finalPositionPlayers){
+    this->players = players;
+    this->currentPlayer = &(this->players[0]);
+    this->map = map;
+    this->gravity = gravity;
+
+    glm::vec2 newC(0, 0);
+    this->camera = newC;
+
+    this->endPlayers = finalPositionPlayers;
+
+    this->quadtree = new Quadtree(new Rectangle(WIDTH*2, HEIGHT*2, glm::vec3(0,0,0), glm::vec2(WIDTH, 0)));
+
+    for (size_t i = 0; i < this->map.size(); i++)
+    {
+        quadtree->insert(&(this->map[i]));
+    }
+};
 
 Niveau::Niveau(std::vector<Rectangle> players, std::vector<Rectangle> map, float g, std::vector<Rectangle> end){
     this->players = players;
