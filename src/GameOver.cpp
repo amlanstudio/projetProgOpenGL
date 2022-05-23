@@ -7,7 +7,7 @@
 
 // ------ CREATION DE MES FONCTIONS ET LISTES ------ 
 
-State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed){
+State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed, float width, float height){
 
         // printf("x: %f, y: %f \n", cursorPosition.x, cursorPosition.y);
 
@@ -37,21 +37,23 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
 
                 if(
                         //hover
-                        cursorPosition.x>=520
-                        && cursorPosition.x<=745
-                        && cursorPosition.y<=490
-                        &&cursorPosition.y>=268
+                        cursorPosition.x>= (365.f/1280.f) * width
+                        && cursorPosition.x<= (585.f/1280.f) * width
+                        && cursorPosition.y<= (635.f/760.f) * height
+                        &&cursorPosition.y>= (570.f/760.f) * height
                 ){
                         glBindTexture(GL_TEXTURE_2D, texture[15]); //application de ma texture "yes" on hover 
 
                         glPushMatrix();
-                                 glTranslatef(70,-45,0);
+                                glTranslatef(-30,-45,0);
                                  glScalef(50.25,19.625,0);
-                                 drawSquare();   
+                                 drawSquare();  
                         glPopMatrix();
                 
 
                         if(mousePressed){
+                                // TODO fix restart level
+                                // initLevel(&level2, playersLvl2, mapLvl2, 0.1f, finalPositionLvl2);
                                 return State::Game;
                         }
                 }
@@ -59,9 +61,9 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                         glBindTexture(GL_TEXTURE_2D, texture[14]); //application de ma texture "yes" out hover 
 
                         glPushMatrix();
-                                glTranslatef(70,-45,0);
-                                glScalef(50.25,19.625,0);
-                                drawSquare();     
+                                glTranslatef(-30,-45,0);
+                                 glScalef(50.25,19.625,0);
+                                 drawSquare();  
                         glPopMatrix();
                 }
                 
@@ -72,17 +74,17 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 if(
 
                 //hover
-                        cursorPosition.x>=940 
-                        && cursorPosition.x<=1202 
-                        && cursorPosition.y<= 680
-                        &&cursorPosition.y>= 594
+                        cursorPosition.x>= (690.f/1280.f) * width
+                        && cursorPosition.x<= (910.f/1280.f) * width
+                        && cursorPosition.y<= (635.f/760.f) * height
+                        &&cursorPosition.y>= (570.f/760.f) * height
                         ){
                 glBindTexture(GL_TEXTURE_2D, texture[13]); //application de ma texture "no" on hover 
 
                 glPushMatrix();
-                        glTranslatef(70,-45,0);
+                        glTranslatef(30,-45,0);
                         glScalef(50.25,19.625,0);
-                        drawSquare();    
+                        drawSquare();      
                 glPopMatrix();  
 
                 //clic
@@ -97,9 +99,9 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 glBindTexture(GL_TEXTURE_2D, texture[11]); //application de ma texture "no" out hover 
 
                 glPushMatrix();
-                        glTranslatef(70,-45,0);
+                        glTranslatef(30,-45,0);
                         glScalef(50.25,19.625,0);
-                        drawSquare();    
+                        drawSquare();       
                 glPopMatrix();
 
                 }

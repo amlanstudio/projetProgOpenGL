@@ -7,4 +7,4 @@
 
 void drawSquare();
 
-State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed);
+State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed, float width, float height);

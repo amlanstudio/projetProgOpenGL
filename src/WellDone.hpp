@@ -6,4 +6,4 @@
 #include "Homepage.hpp"
 
 
-State displayWellDone(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed);
+State displayWellDone(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed, float width, float height);

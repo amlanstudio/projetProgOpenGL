@@ -24,7 +24,7 @@ void drawSquare(){
 }
 //------- FIN -----------------------
 
-State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed){
+State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed, float width, float height){
 
         // printf("x: %f, y: %f \n", cursorPosition.x, cursorPosition.y);
 
@@ -54,11 +54,12 @@ State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
 
                 if(
                         //hover
-                        cursorPosition.x>=520
-                        && cursorPosition.x<=745
-                        && cursorPosition.y<=490
-                        &&cursorPosition.y>=268
-                ){
+                        cursorPosition.x>= (520.f/1280.f) * width //520
+                        && cursorPosition.x<= (745.f/1280.f) * width //745
+                        && cursorPosition.y<= (490.f/760.f) * height //490
+                        &&cursorPosition.y>= (268.f/760.f) * height //268
+                )
+                {
                         glBindTexture(GL_TEXTURE_2D, texture[5]); //application de ma texture rules avant hover 
 
                         glPushMatrix();
@@ -89,10 +90,10 @@ State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 if(
 
                 // hover
-                        cursorPosition.x>=80
-                        && cursorPosition.x<=340
-                        && cursorPosition.y<= 680
-                        &&cursorPosition.y>= 594
+                        cursorPosition.x>= (80.f/1280.f) * width
+                        && cursorPosition.x<= (340.f/1280.f) * width
+                        && cursorPosition.y<= (680.f/760.f) * height
+                        &&cursorPosition.y>= (594.f/760.f) * height
                 ){
                         glBindTexture(GL_TEXTURE_2D, texture[6]); //application de ma texture rules avant hover 
 
@@ -122,10 +123,10 @@ State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 if(
 
                 //hover
-                        cursorPosition.x>=510
-                        && cursorPosition.x<=770
-                        && cursorPosition.y<= 680
-                        &&cursorPosition.y>= 594
+                        cursorPosition.x>= (510.f/1280.f) * width
+                        && cursorPosition.x<= (770.f/1280.f) * width
+                        && cursorPosition.y<= (680.f/760.f) * height
+                        &&cursorPosition.y>= (594.f/760.f) * height
                 ){
                         glBindTexture(GL_TEXTURE_2D, texture[7]); //application de ma texture rules avant hover 
 
@@ -155,10 +156,10 @@ State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 if(
 
                 //hover
-                        cursorPosition.x>=940 
-                        && cursorPosition.x<=1202 
-                        && cursorPosition.y<= 680
-                        &&cursorPosition.y>= 594
+                        cursorPosition.x>= (940.f/1280.f) * width 
+                        && cursorPosition.x<= (1202.f/1280.f) * width 
+                        && cursorPosition.y<= (680.f/760.f) * height
+                        &&cursorPosition.y>= (594.f/760.f) * height
                         ){
                 glBindTexture(GL_TEXTURE_2D, texture[8]); //application de ma texture rules après hover 
 

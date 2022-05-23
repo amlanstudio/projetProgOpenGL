@@ -7,7 +7,7 @@
 
 // ------ CREATION DE MES FONCTIONS ET LISTES ------ 
 
-State displayWellDone(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed){
+State displayWellDone(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed, float width, float height){
 
         // printf("x: %f, y: %f \n", cursorPosition.x, cursorPosition.y);
 
@@ -37,10 +37,10 @@ State displayWellDone(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
 
                 if(
                         //hover
-                        cursorPosition.x>=365
-                        && cursorPosition.x<=585
-                        && cursorPosition.y<=635
-                        &&cursorPosition.y>=570
+                        cursorPosition.x>= (365.f/1280.f) * width
+                        && cursorPosition.x<= (585.f/1280.f) * width
+                        && cursorPosition.y<= (635.f/760.f) * height
+                        &&cursorPosition.y>= (570.f/760.f) * height
                 ){
                         glBindTexture(GL_TEXTURE_2D, texture[15]); //application de ma texture "yes" on hover 
 
@@ -71,13 +71,12 @@ State displayWellDone(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 //Bouton No
 
                 if(
-
-                //hover
-                        cursorPosition.x>=690
-                        && cursorPosition.x<=910
-                        && cursorPosition.y<=635
-                        &&cursorPosition.y>=570
-                        ){
+                        //hover
+                        cursorPosition.x>= (690.f/1280.f) * width
+                        && cursorPosition.x<= (910.f/1280.f) * width
+                        && cursorPosition.y<= (635.f/760.f) * height
+                        &&cursorPosition.y>= (570.f/760.f) * height
+                ){
                 glBindTexture(GL_TEXTURE_2D, texture[13]); //application de ma texture "no" on hover 
 
                 glPushMatrix();

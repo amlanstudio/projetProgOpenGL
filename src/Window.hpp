@@ -1,3 +1,4 @@
+#pragma once
 static float WIDTH = 2.0f;
 static float HEIGHT = 1.0f;
 

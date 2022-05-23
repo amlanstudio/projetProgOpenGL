@@ -12,7 +12,7 @@ enum class Power{
 class Rectangle
 {
 private:
-    glm::vec3 color;
+    
     glm::vec2 position;
     glm::vec2 oldPosition;
 
@@ -40,6 +40,9 @@ public:
 
     // Permet de tourner le rectangle de 90°
     void rotation();
+
+    // Permet la destruction d'une forme de meme couleur
+    void destroy();
 
     // Fonction de saut
     void jump();
@@ -73,7 +76,7 @@ public:
     // Accès au poids
     float getWeight();
 
-        
+    glm::vec3 color;
     
     float top();
     float bottom();

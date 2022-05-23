@@ -1,7 +1,7 @@
 #include "Credits.hpp"
 #include "GLFW/glfw3.h"
 
-State displayCredits(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed){
+State displayCredits(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed, float width, float height){
 
         // printf("x: %f, y: %f \n", cursorPosition.x, cursorPosition.y);
 
@@ -31,10 +31,10 @@ State displayCredits(GLuint* texture, glm::vec2 cursorPosition, bool mousePresse
 
         if(
                     //hover
-                    cursorPosition.x>=875
-                    && cursorPosition.x<=1065
-                    && cursorPosition.y<=695
-                    &&cursorPosition.y>=640
+                    cursorPosition.x>= (875.f/1280.f) * width
+                    && cursorPosition.x<= (1065.f/1280.f) * width
+                    && cursorPosition.y<= (695.f/760.f) * height
+                    &&cursorPosition.y>= (640.f/760.f) * height
                 ){
                         glBindTexture(GL_TEXTURE_2D, texture[12]); //application de ma texture "back" avant hover 
 

@@ -34,7 +34,7 @@ App::App(): App(2.0f) {
 
 App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(viewSize), currentState(State::Homepage) {
 
-    const int nbImages = 19;
+    const int nbImages = 21;
 
     // tips found here for absolut ressources path: https://shot511.github.io/2018-05-29-how-to-setup-opengl-project-with-cmake/
     const std::string imagePath[nbImages] = {
@@ -56,7 +56,9 @@ App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(view
         std::string(ROOT_DIR) + "res/buttons/hovbtnyes.png",//15
         std::string(ROOT_DIR) + "res/images/gameover.png",//16
         std::string(ROOT_DIR) + "res/images/welldone.png",//17
-        std::string(ROOT_DIR) + "res/images/credits.png"//18
+        std::string(ROOT_DIR) + "res/images/credits.png",//18
+        std::string(ROOT_DIR) + "res/images/bg_level1.png",//19
+        std::string(ROOT_DIR) + "res/images/bg_level2.png"//20
         };
 
     glGenTextures(nbImages, _textureId);
@@ -73,7 +75,10 @@ App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(view
     }
 
     initLevel(&level1, playersLvl1, mLvl1, 0.1f, finalPosition);
-    this->levels = {&level1};
+    initLevel(&level2, playersLvl2, mapLvl2, 0.1f, finalPositionLvl2);
+
+    // TODO penser à reset tous les niveaux à la fin
+    this->levels = {&level2};
 }
 
 void App::LoadImage(const std::string& imagePath, int currentImage) {
@@ -108,9 +113,6 @@ void App::Update() {
     double currentTime = glfwGetTime();
     double elapsedTime = currentTime - _previousTime;
     _previousTime = currentTime;
-    
-    // update imageAngle (use elapsedTime to update without being dependent on the frame rate)
-    // _imageAngle = fmod(_imageAngle + 10.0f * (float)elapsedTime, 360.0f);
 
     if(currentState == State::Game){
         if(currentLevel < this->levels.size()){
@@ -145,10 +147,22 @@ void App::Render() {
                 glDisable(GL_TEXTURE_2D);
                 glLoadIdentity();
 
-                // TODO cube with level number
-
                 glPushMatrix();
                 glTranslatef(this->levels[currentLevel]->camera.x, this->levels[currentLevel]->camera.y, 0);
+                
+                // Affichage du numéro du niveau courant
+                glPushMatrix();
+                    glEnable(GL_TEXTURE_2D);  // activation du texturing
+                    glEnable(GL_BLEND);  // activation la transparence
+                    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);  // gere la transparence
+                    glBindTexture(GL_TEXTURE_2D, _textureId[19 + currentLevel]); //application de ma texture de current Level
+                        glTranslatef(0, 0.5f, 0);
+                        glScalef(2, 1, 0);
+                        drawSquare();
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                    glDisable(GL_TEXTURE_2D);
+                glPopMatrix();
+
                 this->levels[currentLevel]->drawMap();
                 this->levels[currentLevel]->drawPlayers();
                 glPopMatrix();
@@ -156,7 +170,8 @@ void App::Render() {
                 currentState = State::WellDone;
                 this->mousePressed = false;
                 initLevel(&level1, playersLvl1, mLvl1, 0.1f, finalPosition);
-                this->levels = {&level1};
+                initLevel(&level2, playersLvl2, mapLvl2, 0.1f, finalPositionLvl2);
+                this->levels = {&level1, &level2};
                 currentLevel = 0;
             }
         }
@@ -165,34 +180,34 @@ void App::Render() {
     if(currentState == State::Homepage){
         // printf("Homepage");
         glLoadIdentity();
-        currentState = displayHomepage(_textureId, cursorPosition, mousePressed);
+        currentState = displayHomepage(_textureId, cursorPosition, mousePressed, this->_width, this->_height);
         this->mousePressed = false;
     }
 
     // Rules
     if(currentState == State::Rules){
         // printf("Rules");
-        currentState = displayRulespage(_textureId, cursorPosition, mousePressed, translateY);
+        currentState = displayRulespage(_textureId, cursorPosition, mousePressed, translateY, this->_width, this->_height);
         scroll = 0;
         this->mousePressed = false;
     }
 
     // GameOver
     if(currentState == State::GameOver){
-        currentState = displayGameOver(_textureId, cursorPosition,mousePressed);
+        currentState = displayGameOver(_textureId, cursorPosition,mousePressed, this->_width, this->_height);
         this->mousePressed = false;
     }
 
      // WellDone
     if(currentState == State::WellDone){
-        currentState = displayWellDone(_textureId, cursorPosition,mousePressed);
+        currentState = displayWellDone(_textureId, cursorPosition,mousePressed, this->_width, this->_height);
         this->mousePressed = false;
     }
 
     // WellDone
     if(currentState == State::Credits){
         // printf("Credits");
-        currentState = displayCredits(_textureId, cursorPosition,mousePressed);
+        currentState = displayCredits(_textureId, cursorPosition,mousePressed, this->_width, this->_height);
         this->mousePressed = false;
     }
 }
@@ -208,6 +223,11 @@ void App::key_callback(int key, int scancode, int action, int mods) {
     if(currentLevel < this->levels.size()){
     // function qui permet d'envoyer les keycode au niveau
         this->levels[currentLevel]->key_callback(key, scancode, action, mods);
+    }    
+
+    // en réalité c'est Q sur lequel il faut appuyer (GLFW est en QWERTY)
+    if(key == GLFW_KEY_A && action == GLFW_PRESS && currentState == State::Game){
+        currentState = State::GameOver;
     }
 }
 

@@ -5,4 +5,4 @@
 #include "App.hpp"
 #include "Homepage.hpp"
 
-State displayCredits(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed);
+State displayCredits(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed, float width, float height);

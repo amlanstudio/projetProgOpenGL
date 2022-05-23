@@ -46,7 +46,7 @@ private:
     int scroll = 0;
     glm::vec2 cursorPosition;
 
-    GLuint _textureId[19];
+    GLuint _textureId[21];
 
     float _imageAngle;
     float _viewSize;

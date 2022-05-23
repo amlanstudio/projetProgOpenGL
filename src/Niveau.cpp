@@ -86,7 +86,7 @@ void Niveau::drawPlayers(){
 
     // Triangle indiquant le current player
         // ici sa couleur normalisée entre 0 et 1
-        glm::vec3 c(1, 0, 0);
+        glm::vec3 c(1, 1, 1);
 
         // ici sa position
         glm::vec2 p(this->currentPlayer->getPosition());
@@ -115,7 +115,10 @@ void Niveau::controls(bool * pressed, double time, int * currentLevel){
         if((float)this->currentPlayer->getPosition().x >= (float)this->endPlayers[i].getPosition().x - 0.01 && 
         (float)this->currentPlayer->getPosition().x <= (float)this->endPlayers[i].getPosition().x + 0.01 && 
         (float)this->currentPlayer->getPosition().y >= (float)this->endPlayers[i].getPosition().y - 0.01 &&
-        (float)this->currentPlayer->getPosition().y <= (float)this->endPlayers[i].getPosition().y + 0.01
+        (float)this->currentPlayer->getPosition().y <= (float)this->endPlayers[i].getPosition().y + 0.01 && 
+        this->currentPlayer->color.r == this->endPlayers[i].color.r * 2 &&
+        this->currentPlayer->color.g == this->endPlayers[i].color.g * 2 &&
+        this->currentPlayer->color.b == this->endPlayers[i].color.b * 2
         ){
             moveable = false;
 
@@ -150,6 +153,7 @@ void Niveau::controls(bool * pressed, double time, int * currentLevel){
     }
 
     for(size_t i = 0; i<this->players.size(); i++){
+        time = std::fmod(time, 5);
         this->players[i].applyGravity(this->gravity, time);
         this->players[i].setPosition(glm::vec2(this->players[i].getPosition().x, this->players[i].getPosition().y + this->players[i].velocity * time));
 

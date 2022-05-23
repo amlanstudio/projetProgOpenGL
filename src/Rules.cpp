@@ -1,7 +1,7 @@
 #include "Rules.hpp"
 #include "GLFW/glfw3.h"
 
-State displayRulespage(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed, int scroll){
+State displayRulespage(GLuint* texture, glm::vec2 cursorPosition, bool mousePressed, int scroll, float width, float height){
 
         // printf("x: %f, y: %f \n", cursorPosition.x, cursorPosition.y);
 
@@ -49,10 +49,10 @@ State displayRulespage(GLuint* texture, glm::vec2 cursorPosition, bool mousePres
         if(
                         //hover
                         scroll > 100
-                        && cursorPosition.x>=543
-                        && cursorPosition.x<=735
-                        && cursorPosition.y<=648
-                        &&cursorPosition.y>=592
+                        && cursorPosition.x>= (543.f/1280.f) * width
+                        && cursorPosition.x<= (735.f/1280.f) * width
+                        && cursorPosition.y<= (648.f/760.f) * height
+                        &&cursorPosition.y>= (592.f/760.f) * height
                 ){
                         glBindTexture(GL_TEXTURE_2D, texture[12]); //application de ma texture "back" avant hover 
 
