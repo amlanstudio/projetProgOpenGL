@@ -55,6 +55,10 @@ int main() {
         get_app(window).size_callback(width, height);
     });
 
+    int xpos, ypos;
+    glfwGetWindowPos(window, &xpos, &ypos);
+    app.window_position_callback(xpos, ypos);
+
     // Force call the size_callback of the app to set the right viewport and projection matrix
     {
         int width, height;
@@ -64,6 +68,9 @@ int main() {
 
     // Loop until the user closes the window
     while (app.currentState != State::Quit && !glfwWindowShouldClose(window)) {
+        glfwGetWindowPos(window, &xpos, &ypos);
+        app.window_position_callback(xpos, ypos);
+        
         app.Update();
 
         // Swap front and back buffers

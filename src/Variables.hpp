@@ -10,7 +10,7 @@
         glm::vec3 noir(0.f,0.f,0.f);
         glm::vec3 jaune(1.f, (210.f/255.f), (27.f/255.f)); 
         glm::vec3 jauneBlur(0.5f, (105.f/255.f), (13.5f/255.f));
-        // glm::vec3 rouge(1, 0, 0);
+        glm::vec3 rouge(1, 0, 0);
         // glm::vec3 rougeBlur(0.5, 0, 0);
         glm::vec3 bleu((77.f/255.f),(155.f/255.f), (208.f/255.f));
         glm::vec3 bleuBlur((38.5f/255.f),(77.5f/255.f), (104.f/255.f));
@@ -120,7 +120,6 @@
     Rectangle murDLvl2(WIDTH*0.5f, HEIGHT*1.5f, noir, pMurD);
 
     // Obstacles Level 2
-    // TODO y a des soucis de collision voir à debunk
 
     glm::vec2 pObs1Lvl2(0, -HEIGHT+0.4f);
     Rectangle obsLvl2(WIDTH-0.6f, 0.2f, noir, pObs1Lvl2);
@@ -132,13 +131,13 @@
     Rectangle obs3Lvl2(0.1f, 0.1f, noir, pObs3Lvl2);
 
     glm::vec2 pObs4Lvl2(WIDTH + (WIDTH) - 1.5f, -HEIGHT+1.0f); // on ne touche plus à lui
-    Rectangle obs4Lvl2(0.2f, 0.4f, bleu, pObs4Lvl2);
+    Rectangle obs4Lvl2(0.2f, 0.4f, noir, pObs4Lvl2);
 
     glm::vec2 pObs5Lvl2(WIDTH + (WIDTH) - 1.9f, -HEIGHT+0.7f);
-    Rectangle obs5Lvl2(0.3f, 0.05f, rose, pObs5Lvl2);
+    Rectangle obs5Lvl2(0.3f, 0.05f, noir, pObs5Lvl2);
     
     glm::vec2 pObs6Lvl2(WIDTH + (WIDTH) - 1.7f, -HEIGHT+1.1f);
-    Rectangle obs6Lvl2(0.2f, 0.08f, jaune, pObs6Lvl2);
+    Rectangle obs6Lvl2(0.2f, 0.08f, noir, pObs6Lvl2);
 
     std::vector<Rectangle> mapLvl2 = {solLvl2, plafondLvl2, murGLvl2, murDLvl2, obsLvl2, obs2Lvl2,obs3Lvl2, obs4Lvl2,obs5Lvl2,obs6Lvl2};
 

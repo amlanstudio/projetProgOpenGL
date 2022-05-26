@@ -182,7 +182,7 @@ void Niveau::key_callback(int key, int scancode, int action, int mods){
 void Niveau::collision(){
     std::vector<Rectangle*> all;
 
-    // sans le quadtree
+    // // sans le quadtree
     // // ajout de la map au vector qui servira aux collisions
     // for (size_t m = 0; m < this->map.size() ; m++)
     // {
@@ -200,7 +200,14 @@ void Niveau::collision(){
         }
     }
 
-    all = this->quadtree->accessRightLeaf(*(this->currentPlayer));
+    // TODO sans le quadtree temporairement car certaines collisions ne fonctionnent plus dans le niveau 2 (a fix)
+    // ajout de la map au vector qui servira aux collisions
+    for (size_t m = 0; m < this->map.size() ; m++)
+    {
+        all.push_back(&(this->map[m]));
+    }
+
+    // all = this->quadtree->accessRightLeaf(*(this->currentPlayer));
 
     // ajout des players qui ne sont pas courant   
     for (size_t j = 1; j < this->players.size(); j++)

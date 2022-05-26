@@ -77,8 +77,7 @@ App::App(float viewSize) : _previousTime(0.0), _imageAngle(0.0f), _viewSize(view
     initLevel(&level1, playersLvl1, mLvl1, 0.1f, finalPosition);
     initLevel(&level2, playersLvl2, mapLvl2, 0.1f, finalPositionLvl2);
 
-    // TODO penser à reset tous les niveaux à la fin
-    this->levels = {&level2};
+    this->levels = {&level1, &level2};
 }
 
 void App::LoadImage(const std::string& imagePath, int currentImage) {
@@ -110,12 +109,18 @@ void App::LoadImage(const std::string& imagePath, int currentImage) {
 
 void App::Update() {
 
+    // printf("w : %d, h: %d \n", _width, _height);
+
     double currentTime = glfwGetTime();
     double elapsedTime = currentTime - _previousTime;
     _previousTime = currentTime;
 
     if(currentState == State::Game){
-        if(currentLevel < this->levels.size()){
+        // on vérifie que la fenetre est pas fermée histoire de pas casser les collisions
+        if(_width == 0 && _height == 0){
+            currentState = State::GameOver;
+            mousePressed = false;
+        } else if(currentLevel < this->levels.size()){
             this->levels[currentLevel]->controls(this->pressed, elapsedTime, &currentLevel);
 
             if(currentLevel < this->levels.size()){
@@ -194,6 +199,24 @@ void App::Render() {
 
     // GameOver
     if(currentState == State::GameOver){
+        this->levels.erase (this->levels.begin()+currentLevel);
+        switch (currentLevel)
+        {
+        case 0:
+            initLevel(&level1, playersLvl1, mLvl1, 0.1f, finalPosition);
+
+            this->levels.insert(this->levels.begin(), &level1);
+            break;
+
+        case 1:
+            initLevel(&level2, playersLvl2, mapLvl2, 0.1f, finalPositionLvl2);
+
+            this->levels.insert(this->levels.begin() + currentLevel, &level2);
+            break;
+        
+        default:
+            break;
+        }
         currentState = displayGameOver(_textureId, cursorPosition,mousePressed, this->_width, this->_height);
         this->mousePressed = false;
     }
@@ -282,6 +305,17 @@ void App::size_callback(int width, int height) {
         glOrtho(-_viewSize / 2.0f, _viewSize / 2.0f, -_viewSize / 2.0f / aspectRatio, _viewSize / 2.0f / aspectRatio, -1.0f, 1.0f);
     }
 }
+
+void App::window_position_callback(int xpos, int ypos){
+
+    // permet d'éviter que des collisions soient cassées au moment du déplacement de la fenetre
+    if(currentState == State::Game && ((_positionX != xpos && _positionX != 0) || (_positionY != ypos && _positionY != 0))){
+        currentState = State::GameOver;
+    }
+
+    _positionX = xpos;
+    _positionY = ypos;
+};
 
 glm::vec2 App::rotateVec2(const glm::vec2& vec, const glm::vec2& center, const float& angle) {
     return glm::rotate(vec-center,  glm::radians(angle))+center;

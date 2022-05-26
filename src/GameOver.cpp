@@ -52,8 +52,6 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 
 
                         if(mousePressed){
-                                // TODO fix restart level
-                                // initLevel(&level2, playersLvl2, mapLvl2, 0.1f, finalPositionLvl2);
                                 return State::Game;
                         }
                 }
@@ -90,7 +88,7 @@ State displayGameOver(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 //clic
 
                 if(mousePressed){
-                        return State::Quit;
+                        return State::Homepage;
                 }
 
                 }

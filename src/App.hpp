@@ -29,6 +29,7 @@ public:
     void scroll_callback(double xoffset, double yoffset);
     void cursor_position_callback(double xpos, double ypos);
     void size_callback(int width, int height);
+    void window_position_callback(int xpos, int ypos);
 
     State currentState;
 
@@ -39,6 +40,8 @@ private:
 
     int _width;
     int _height;
+    int _positionX = 0;
+    int _positionY = 0;
     double _previousTime;
 
     bool pressed[349];
