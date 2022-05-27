@@ -185,14 +185,14 @@ void App::Render() {
     if(currentState == State::Homepage){
         // printf("Homepage");
         glLoadIdentity();
-        currentState = displayHomepage(_textureId, cursorPosition, mousePressed, this->_width, this->_height);
+        currentState = displayHomepage(_textureId, cursorPosition, mousePressed, (float) this->_width, (float) this->_height);
         this->mousePressed = false;
     }
 
     // Rules
     if(currentState == State::Rules){
         // printf("Rules");
-        currentState = displayRulespage(_textureId, cursorPosition, mousePressed, translateY, this->_width, this->_height);
+        currentState = displayRulespage(_textureId, cursorPosition, mousePressed, translateY, (float) this->_width, (float) this->_height);
         scroll = 0;
         this->mousePressed = false;
     }
@@ -217,20 +217,20 @@ void App::Render() {
         default:
             break;
         }
-        currentState = displayGameOver(_textureId, cursorPosition,mousePressed, this->_width, this->_height);
+        currentState = displayGameOver(_textureId, cursorPosition,mousePressed, (float) this->_width, (float) this->_height);
         this->mousePressed = false;
     }
 
      // WellDone
     if(currentState == State::WellDone){
-        currentState = displayWellDone(_textureId, cursorPosition,mousePressed, this->_width, this->_height);
+        currentState = displayWellDone(_textureId, cursorPosition,mousePressed, (float) this->_width, (float) this->_height);
         this->mousePressed = false;
     }
 
     // WellDone
     if(currentState == State::Credits){
         // printf("Credits");
-        currentState = displayCredits(_textureId, cursorPosition,mousePressed, this->_width, this->_height);
+        currentState = displayCredits(_textureId, cursorPosition,mousePressed, (float) this->_width, (float) this->_height);
         this->mousePressed = false;
     }
 }

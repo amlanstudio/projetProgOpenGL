@@ -41,7 +41,7 @@ public:
     // Permet de tourner le rectangle de 90°
     void rotation();
 
-    // Permet la destruction d'une forme de meme couleur
+    // TODO Permet la destruction d'une forme de meme couleur
     void destroy();
 
     // Fonction de saut

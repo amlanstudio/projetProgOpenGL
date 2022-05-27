@@ -13,6 +13,7 @@ private:
    float gravity;
    Rectangle* currentPlayer;
 
+    // Position finale des joueurs
    std::vector<Rectangle> endPlayers;
 
    Quadtree* quadtree;
