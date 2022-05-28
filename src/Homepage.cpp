@@ -51,7 +51,6 @@ State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                 glPopMatrix();  
                 
                 //Bouton start
-
                 if(
                         //hover
                         cursorPosition.x>= (520.f/1280.f) * width //520
@@ -68,12 +67,10 @@ State displayHomepage(GLuint* texture, glm::vec2 cursorPosition, bool mousePress
                                 drawSquare();    
                         glPopMatrix();
                 
-
                         if(mousePressed){
                                 return State::Game;
                         }
-                }
-                else{
+                } else {
                         glBindTexture(GL_TEXTURE_2D, texture[1]); //application de ma texture start apres hover 
 
                         glPushMatrix();

@@ -41,21 +41,25 @@ void Rectangle::collision(Rectangle* other){
     }
 
     if(
-        this->position.y - this->halfHeight < other->position.y + other->halfHeight && this->oldPosition.y - this->halfHeight >= other->oldPosition.y + other->halfHeight
+        this->position.y - this->halfHeight < other->position.y + other->halfHeight 
+        && this->oldPosition.y - this->halfHeight >= other->oldPosition.y + other->halfHeight
     ){
         this->isJumping = false;
 
         this->position.y = other->position.y + other->halfHeight + this->halfHeight;
     } else if(
-        this->position.y + this->halfHeight > other->position.y - other->halfHeight && this->oldPosition.y + this->halfHeight <= other->oldPosition.y - other->halfHeight
+        this->position.y + this->halfHeight > other->position.y - other->halfHeight 
+        && this->oldPosition.y + this->halfHeight <= other->oldPosition.y - other->halfHeight
     ) {
         this->position.y = other->position.y - other->halfHeight - this->halfHeight;
     }else if(
-        this->position.x - this->halfWidth < other->position.x + other->halfWidth && this->oldPosition.x - this->halfWidth >= other->oldPosition.x + other->halfWidth
+        this->position.x - this->halfWidth < other->position.x + other->halfWidth 
+        && this->oldPosition.x - this->halfWidth >= other->oldPosition.x + other->halfWidth
     ) {
         this->position.x = other->position.x + other->halfWidth + this->halfWidth;
     }else if(
-        this->position.x + this->halfWidth > other->position.x - other->halfWidth && this->oldPosition.x + this->halfWidth <= other->oldPosition.x - other->halfWidth 
+        this->position.x + this->halfWidth > other->position.x - other->halfWidth 
+        && this->oldPosition.x + this->halfWidth <= other->oldPosition.x - other->halfWidth 
     ) {
         this->position.x = other->position.x - other->halfWidth - this->halfWidth;
     }

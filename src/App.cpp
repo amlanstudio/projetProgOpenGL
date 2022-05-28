@@ -162,7 +162,7 @@ void App::Render() {
                     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);  // gere la transparence
                     glBindTexture(GL_TEXTURE_2D, _textureId[19 + currentLevel]); //application de ma texture de current Level
                         glTranslatef(0, 0.5f, 0);
-                        glScalef(2, 1, 0);
+                        glScalef(1, 0.5, 0);
                         drawSquare();
                     glBindTexture(GL_TEXTURE_2D, 0);
                     glDisable(GL_TEXTURE_2D);
