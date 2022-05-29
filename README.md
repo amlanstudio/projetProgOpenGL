@@ -1,8 +1,8 @@
-# OpenGLTemplate
+# Les Cassoulettes Were Alone (OpenGL)
 
 Welcome !
 
-This is a small template for starting new project with openGL.
+This is a small project with openGL made during semester 2 of IMAC in 2022.
 
 ## Compiling
 
@@ -10,11 +10,13 @@ You need to install [CMake](https://cmake.org/download/).
 
 To use CMake I recommend this VS Code extension : [ms-vscode.cmake-tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools). You will need to setup the extension with a compiler. Here is [the tutorial](https://code.visualstudio.com/docs/cpp/cmake-linux). It is based on Linux but at the bottom of the page you will find the explanations to adapt it for [Windows](https://code.visualstudio.com/docs/cpp/config-msvc) and [Mac](https://code.visualstudio.com/docs/cpp/config-clang-mac).
 
+Just to mention : for Mac M1 GLFW and OpenGL 1 does not work !
+
 Alternatively you can just create a *build* folder at the root of this project, open a terminal and run `cmake ..` ; chances are it will detect what compiler you have installed and generate the appropriate Makefile / Visual Studio solution / Xcode project.
 
 ## main.cpp
 
-In here we initialize [*glfw*](https://www.glfw.org/docs/latest/) (the library that handles the window and user inputs), create a window and then start the app. You don't really need to modify this file, except to change your window name or initial size.
+In here we initialize [*glfw*](https://www.glfw.org/docs/latest/) (the library that handles the window and user inputs), create a window and then start the app.
 
 ## User inputs
 
@@ -22,7 +24,7 @@ To learn more about the parameters you receive in the callbacks, read [glfw's do
 
 ## App
 
-This is the actual root of your project. This is where your drawing code should go, as well as handling inputs from the user.
+This is the actual root of the project. This is where the drawing code should go, as well as handling inputs from the user.
 
 ## Assets
 

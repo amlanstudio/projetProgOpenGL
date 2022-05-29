@@ -200,7 +200,7 @@ void Niveau::collision(){
         }
     }
 
-    // TODO sans le quadtree temporairement car certaines collisions ne fonctionnent plus dans le niveau 2 (a fix)
+    // Sans le quadtree car certaines collisions ne fonctionnent plus dans le niveau 2 (a fix)
     // ajout de la map au vector qui servira aux collisions
     for (size_t m = 0; m < this->map.size() ; m++)
     {

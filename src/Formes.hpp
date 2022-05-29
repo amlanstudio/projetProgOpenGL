@@ -20,7 +20,7 @@ private:
     float halfHeight;
     float halfWidth;
 
-    // TODO destroy à gérer
+    // Destroy à implémenter un jour
     Power power;
 
     bool isJumping = false;
@@ -41,7 +41,7 @@ public:
     // Permet de tourner le rectangle de 90°
     void rotation();
 
-    // TODO Permet la destruction d'une forme de meme couleur
+    // Permet la destruction d'une forme de meme couleur à implémenter
     void destroy();
 
     // Fonction de saut

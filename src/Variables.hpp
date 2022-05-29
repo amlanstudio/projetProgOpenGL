@@ -85,7 +85,7 @@
     // Players level 2
 
     Rectangle playerLvl2(0.1f, 0.1f, jaune, p1L2, wCarreLvl2); //carré jaune basic
-    Rectangle player2Lvl2(0.1f, 0.1f, bleu, p2L2, wCarreLvl2); //carré bleu destructeur //TODO pouvoir de destruction
+    Rectangle player2Lvl2(0.1f, 0.1f, bleu, p2L2, wCarreLvl2); //carré bleu destructeur //Pouvoir de destruction à implémenter
     Rectangle player3Lvl2(0.1f, 0.2f, rose, p3L2, wRose, Power::Rotate); //carré rose rotatif
 
     std::vector<Rectangle> playersLvl2 = {playerLvl2, player2Lvl2, player3Lvl2};
